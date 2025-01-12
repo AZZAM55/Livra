@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Language" content="zh-cn">
+    <meta name="apple-mobile-web-app-capable" content="no"/>
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <meta name="format-detection" content="telephone=no,email=no"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="white">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>订单支付</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/zui/1.9.1/css/zui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/zui/1.9.1/css/zui-theme.min.css">
+	<style>
+	body{background:#f1f1f1;}
+	.body{max-width:640px;margin:0 auto;padding:0 5px;}
+	.item-content{background:#fff;padding:5px;}
+	.title{max-height:4.5em;overflow:hidden;}
+	.price{color:#F00}
+	.total{color:#F00;font-size:25px;}
+	.table{margin:10px 0;}
+	.table td{text-align:right;}
+	.def{background:#fff}
+	</style>
+</head>
+
+<body>
+ 
+<div class="body">
+<div class="items">
+	<div class="item">
+		<div class="item-heading">
+			<h4>购买商品详情</h4>
+		</div>
+		<div class="item-content">
+			<php>$image = getFields("Item","image",$order['item_id']);</php>
+			<notempty name="image"><div class="media pull-left"><img src="{$image|imageUrl}" alt=""></div></notempty>
+			<div class="text title"><strong>{$order.item_name}</strong></div>
+			<div class="text"><strong class="price">{$order.total_price}元</strong></div>
+		</div>
+		<table class="table">
+		  <tbody>
+			<tr class="def">
+			  <th>配送试工</th>
+			  <td>普通快递 快递免邮</td>
+			</tr>
+			<tr class="def">
+			  <th>发货时限</th>
+			  <td>付款后24小时内发出</td>
+			</tr>
+		  </tbody>
+		</table>
+		
+		<div class="item-heading">
+			<h4>商品支付详情</h4>
+		</div>
+		<table class="table">
+		  <tbody>
+			<tr class="def">
+			  <th><img src="data:image/jpeg;base64,/9j/4QAYRXhpZgAASUkqAAgAAAAAAAAAAAAAAP/sABFEdWNreQABAAQAAABQAAD/4QMraHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLwA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/PiA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJBZG9iZSBYTVAgQ29yZSA1LjMtYzAxMSA2Ni4xNDU2NjEsIDIwMTIvMDIvMDYtMTQ6NTY6MjcgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDUzYgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjU1OTkwQTJCNTQ2ODExRTY5MDc2RDFCRTlDQTM1OTQzIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjU1OTkwQTJDNTQ2ODExRTY5MDc2RDFCRTlDQTM1OTQzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NTU5OTBBMjk1NDY4MTFFNjkwNzZEMUJFOUNBMzU5NDMiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NTU5OTBBMkE1NDY4MTFFNjkwNzZEMUJFOUNBMzU5NDMiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7/7gAOQWRvYmUAZMAAAAAB/9sAhAACAgICAgICAgICAwICAgMEAwIC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"></th>
+			  <td colspan="2"><strong class="total">{$order.total_price}元</strong></td>
+			</tr>
+			<tr class="def"><th colspan="2">微信支付提供安全快捷的支付，安全有保障</th></tr>
+		  </tbody>
+		</table>
+		<form id="post_data" action="https://pay.ispay.cn/core/api/request/pay/" method="post">
+			  <input type="hidden" name="payId" value="{$result.payId}"/>
+			  <input type="hidden" name="payChannel" value="{$result.payChannel}"/>
+			  <input type="hidden" name="Subject" value="{$result.Subject}"/>
+			  <input type="hidden" name="Money" value="{$result.Money}"/>
+			  <input type="hidden" name="orderNumber" value="{$result.orderNumber}"/>
+			  <input type="hidden" name="attachData" value="{$result.attachData}"/>
+			  <input type="hidden" name="Notify_url" value="{$result.Notify_url}"/>
+			  <input type="hidden" name="Return_url" value="{$result.Return_url}"/>
+			  <input type="hidden" name="Sign" value="{$result.Sign}"/>
+			  <button class="btn btn-success btn-block " id="submit" type="submit">确认支付</button>
+		  </form>
+		
+	</div>
+</div>
+<script src="https://cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+<script>
+$(function(){
+	var url = "{:C('ALIZI_ROOT')}index.php";
+	var order_id = "{$order['id']}";
+	$.ajax({ url:url+"?m=Api&a=send",timeout:100,data:{order_id:order_id} });
+	//$('#submit').click();
+})
+</script>
+</body>
+</html>

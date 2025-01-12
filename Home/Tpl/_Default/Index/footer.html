@@ -1,0 +1,28 @@
+<div class="footer">
+	<div class="mainwidth">
+		<if condition="empty($aliziConfig['contact_tel']) && empty($aliziConfig['contact_qq'])">
+		<style>.alizi-copyright{width:100% !important;padding-right:0 !important;text-align:center;}.alizi-contact{display:none !important;}</style>
+		</if>
+		<ul class="footcon">
+			<li class="alizi-copyright">
+				<div class="copyright">{$aliziConfig.footer}</div>
+			</li>
+			<li class="alizi-contact">
+				<div class="foottel">
+					<notempty name="aliziConfig.contact_tel">
+					<span class="tell">{:lang('serviceNumber')}<span class="num">{$aliziConfig.contact_tel}</span></span>
+					</notempty>
+					<notempty name="aliziConfig.contact_qq">
+					<span class="online">{:lang('online_service')} <span class="num"><a href="https://wpa.qq.com/msgrd?v=3&uin={$aliziConfig.contact_qq}&site=qq&menu=yes" target="_blank"><img border="0" src="https://wpa.qq.com/pa?p=2:{$aliziConfig.contact_qq}:51 &amp;r=0.22914223582483828"></a></span></span>
+					<else /><br />
+					</notempty>
+				</div>
+				
+			</li>
+		</ul>
+	</div>
+</div>
+<div id="aliziUp"></div>
+<script type="text/javascript">
+seajs.use(['jquery/scrollup'], function(){ $.scrollUp({scrollName: 'aliziUp'}); });
+</script>

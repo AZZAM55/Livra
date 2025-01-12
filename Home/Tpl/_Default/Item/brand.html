@@ -1,0 +1,18 @@
+<php>
+$brand = M('Category')->where('type=1 and image!=""')->order('sort_order asc')->select();
+if($brand){
+</php>
+<div class="newmain background" style="margin-bottom:8px;">
+	<div class="indextit"> 热门品牌<span>HotBrand</span></div>
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="brandico">
+	  <tbody>
+	  <tr>
+	  <volist name="brand" id="vo">
+		<if condition="$key gt 0 AND $key%4 eq 0"></tr><tr></if>
+		<td class="f1"><div align="center"><a class="links" href="{:U('Item/category',array('id'=>$vo['id']))}"><img src="{$vo.image|imageUrl}"></a><span>{$vo.name}</span></div></td>
+	  </volist>
+	  </tr>
+	</tbody>
+	</table>
+</div>
+<php> } </php>

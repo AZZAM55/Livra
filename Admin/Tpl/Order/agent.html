@@ -1,0 +1,141 @@
+{:W("Main",array('module'=>MODULE_NAME,'action'=>ACTION_NAME,'do'=>$_GET['do']))}
+
+<div class="layout-main">    
+    <div id="breadclumb" class="box">
+        <h3><strong>{:lang('breadclumb_colon')}</strong>{:lang(MODULE_NAME)}<span></span>{:lang('order_list')}</h3>
+    </div>
+    <div id="CooperationMain" class="box clear-fix">   
+        <div class="layout-block-header">
+            <form action="__SELF__" method="get" id="searchform">
+            	<input type="hidden" name="s" value="{$Think.const.MODULE_NAME}" />
+				<input type="hidden" name="a" value="{$Think.const.ACTION_NAME}" />
+                <label>{:lang('order_search_colon')}</label>
+				<select name="fields">
+					<php>$fields=array('order_no'=>lang('order_number'),'item_name'=>lang('item_name'),'channel_id'=>lang('channel'));</php>
+					<volist name="fields" id="vo">
+					<option value="{$key}" <eq name="_GET.fields" value="$key">selected='selected'</eq>>{$vo}</option>
+					</volist>
+				</select>
+                <input type="text" name="keyword" value="{$_GET['keyword']|trim}" class="ui-text" autocomplete="off" size="40">
+                <button type="submit" class="btn btn-ok">{:lang('search')}</button>
+				<if condition="in_array('down',$_SESSION['user']['auth'])"><button type="submit" class="btn" name="aliziExcel">{:lang('download_order')}</button></if>
+				
+				<div class="search-list filter clear-fix">
+                    <label>{:lang('booking_time_colon')}</label>
+                    <input type="text" name="time_start" value="{$_GET['time_start']|trim}" size="18" class="ui-text Wdate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'});">{:lang('to')}<input type="text" name="time_end" value="{$_GET['time_end']|trim}" size="18" class="ui-text Wdate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'});">
+				
+					<select name="pageSize">
+						<php>$pageSize=array('25','50','100','500');</php>
+						<volist name="pageSize" id="vo">
+							<option value="{$vo}" <eq name="vo" value="$_GET['pageSize']">selected</eq>>每页显示{$vo}条</option>
+						</volist>
+					</select>
+                </div>
+				
+				<div class="search-list filter clear-fix">
+					<div class="title">{:lang('order_status_colon')}</div>
+					<div class="all"><q onclick="searchButtun('#status','')" <if condition="!is_numeric($_GET['status'])">class="select_item"</if>>所有</q></div>
+					<div class="division">|</div>
+					<div class="scope"><volist name="status" id="vo"><q onclick="searchButtun('#status','{$key}')" <if condition="is_numeric($_GET['status']) && $_GET['status'] eq $key">class="select_item"</if>>{$vo.name|strip_tags}({$vo.count})</q></volist></div>
+					<input type="hidden" name="status" id="status" value="{$_GET.status}">
+				</div>
+			
+				<div class="search-list filter clear-fix">
+					<div class="title">{:lang('payment_colon')}</div>
+					<div class="all"><q onclick="searchButtun('#payment','')" <if condition="!is_numeric($_GET['payment'])">class="select_item"</if>>所有</q></div>
+					<div class="division">|</div>
+					<div class="scope"><volist name=":C('PAYMENT')" id="vo"><q onclick="searchButtun('#payment','{$key}')" <if condition="is_numeric($_GET['payment']) && $_GET['payment'] eq $key">class="select_item"</if>>{$vo.name|strip_tags}</q></volist></div>
+					<input type="hidden" name="payment" id="payment" value="{$_GET.payment}">
+				</div>
+            </form>
+        </div>
+        
+		<form action="{:U('Order/deleteAll')}" method="post" id="deleteform">
+        <div class="ui-table">
+            <div class="ui-table-body ui-table-body-hover">
+                <table cellpadding="0" cellspacing="0" width="100%" >
+                    <thead>
+                        <tr class="ui-table-head">
+                            <th class="ui-table-hcell" width="100">{:lang('id_/_order_number')}</th>
+                            <th class="ui-table-hcell">{:lang('order_info')}</th>
+                            <th class="ui-table-hcell" >{:lang('customer_info')}</th>
+                            <th class="ui-table-hcell" width="60">{:lang('amount_price')}</th>
+							<th class="ui-table-hcell" width="80">{:lang('payment_status')}</th>
+							<th class="ui-table-hcell" width="60">{:lang('express')}</th>
+                            <th class="ui-table-hcell" width="80">{:lang('remark')}</th>
+                            <th class="ui-table-hcell" width="85">{:lang('time')}</th>
+                            <th class="ui-table-hcell" width="80">{:lang('action')}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+						<php>$payment = C('PAYMENT');</php>
+                        <volist name="list" id="vo">
+                        <tr id="row-{$vo.id}">
+                            <td>
+							ID:{$vo.id}<br>{$vo.order_no}
+							</td>
+                            <td>
+								<div style="float:left;">
+								<p>【商品编号】{$vo.item_sn}</p>
+								<p>【商品名称】{$vo.item_name}</p>
+								<notempty name="vo.item_params"><p>【商品套餐】{$vo.item_params} </p></notempty>
+								<php>
+									$item_extends = json_decode($vo['item_extends'],true);
+									if(!empty($item_extends)){
+										foreach($item_extends as $key=>$val){ 
+											$val = is_array($val)?implode('#',$val):$val;
+											echo "<p>【".$key."】$val</p>"; 
+										}
+									}
+								</php>
+								
+								<notempty name="vo.channel_id"><p>【推广渠道】{$vo.channel_id}</p></notempty>
+								</div>
+							</td>
+                            <td>
+								<neq name="vo.user_id" value="$_SESSION['user']['id']"><p style='color:#f00'>【用户】{$vo.user_id|getFields="User","username",###}</p></neq>
+								<notempty name="vo.name">【姓名】{$vo.name}<br></notempty>
+								<if condition="in_array('detail',$_SESSION['user']['auth']['Order'])">
+									<notempty name="vo.mobile">【手机】{$vo.mobile}<br></notempty>
+									<notempty name="vo.mail">【邮箱】{$vo.mail}<br></notempty>
+									<notempty name="vo.address">【地址】{$vo.region} {$vo.address}<br></notempty>
+								</if>
+							</td>
+                            <td>{$vo.quantity}/<b class="alert">{$vo.total_price}</b></td>
+                            <td>{$payment[$vo['payment']]['name']}<br>{:status($vo['status'],'',C('order_status'))}</td>
+                            <td>{:experss($vo['delivery_name'],$vo['delivery_no'])}</td>
+                            <td>
+								<php>
+									echo $vo['remark'];
+								</php>
+							</td>
+                            <td>{$vo.add_time|date="y-m-d H:i",###}</td>
+                            <td class="action">
+								<if condition="in_array('modify',$_SESSION['user']['auth'])">
+								<a href="{:U('Order/'.ACTION_NAME,array('do'=>'modify','id'=>$vo['id']))}">{:lang('modify')}</a>
+								</if>
+                                <!--a href="{:U('Order/'.ACTION_NAME,array('do'=>'view','id'=>$vo['id']))}">{:lang('view')}</a-->
+							</td>
+                        </tr>
+                        </volist>
+                    </tbody>
+					
+                </table>
+            </div>
+        </div>
+          
+        <div class="ui-pager-bar clearfix" style="padding-left:10px;">
+			<div class="ui-pager" style="float:right">{$page}</div>
+		</div>
+		
+		</form>
+</div><!--.box-->
+<script type="text/javascript" src="__PUBLIC__/Assets/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+function delConfirm(){
+	$.confirm('是否要删除？',function(){ 
+		$('#deleteform').submit();
+	},true)
+}
+</script>
+{:W("Foot")}   

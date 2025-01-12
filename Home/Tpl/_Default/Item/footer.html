@@ -1,0 +1,33 @@
+
+	<div class="newmain footer">{$aliziConfig.footer}</div>
+	<div class="clear ptop"></div>
+	
+	<notempty name="aliziConfig.foot_info"><div class="alizi-foot-info" style="position:fixed;z-index:100;height: 45px;line-height: 45px;bottom:46px;text-align:center;background:#f60;color:#fff;width:100%;">{$aliziConfig.foot_info}</div></notempty>
+	<notempty name="aliziConfig.show_bottom_nav">
+	<div class="nav2">
+		<php>
+		$navArray = explode("<br />",nl2br($aliziConfig['footer_nav']));
+		foreach($navArray as $li){ $nav[] = explode('||',$li);}
+		$width = 100/(count($nav)+1);
+		</php>
+			
+		<li style="width:{$width}%"><a href="{:U('Item/index')}"><span class="am-icon-home"></span><p>{:lang('index')}</p></a></li>
+		<volist name="nav" id="vo">
+		<php>
+			$ico = isset($vo[2])?$vo[2]:'reorder';
+			$vo[1] = strpos($vo[1],'index.php')===0?C('ALIZI_ROOT').$vo[1]:$vo[1];
+		</php>
+		<li style="width:{$width}%"><a href="{$vo[1]}"><span class="am-icon-{$ico}"></span><p>{$vo[0]}</p></a></li>
+		</volist>
+	</div>
+	</notempty>
+<script type="text/javascript">
+seajs.use(['jquery/scrollup'], function(){ $.scrollUp({scrollName: 'aliziUp'}); });
+</script>
+<notempty name="aliziConfig.contact_line">
+<a href="{$aliziConfig.contact_line}" target="_blank" style="display:inline-block;position: fixed;z-index:100;right:10px;bottom:60px;">
+<img src="__PUBLIC__/Alizi/line.png" />
+</a>
+</notempty>
+</body>
+</html>

@@ -1,0 +1,89 @@
+{:W("Main",array('module'=>MODULE_NAME,'action'=>ACTION_NAME))}
+<empty name="aliziConfig.item_quantity">
+<style>.aliziQuantity{display:none;}</style>
+</empty>
+<style>
+.using{background:#f60;color:#fff;display:inline-block;padding:1px 5px;border-radius:2px;}
+.using:hover{background:#06c;color:#fff !important;}
+</style>
+<div class="layout-main">    
+    <div id="breadclumb" class="box">
+        <h3><strong>{:lang('breadclumb_colon')}</strong>{:lang(MODULE_NAME)}<span></span>{:lang('item_list')}</h3>
+    </div>
+    <div id="CooperationMain" class="box clear-fix">   
+        <div class="layout-block-header">
+            <form action="__SELF__" method="get" id="searchform">
+            	<input type="hidden" name="s" value="{$Think.const.MODULE_NAME}" />
+				<input type="hidden" name="a" value="{$Think.const.ACTION_NAME}" />
+                <label>{:lang('search_colon')}</label>
+                <input type="text" name="keyword" value="{$_GET['keyword']|trim}" class="ui-text" autocomplete="off" size="40">
+                <button type="submit" class="btn btn-ok">{:lang('search')}</button>
+            </form>
+        </div>
+        
+		<form action="{:U('Item/todo')}" method="post" id="deleteform">
+        <div class="ui-table">
+            <div class="ui-table-body ui-table-body-hover">
+                <table cellpadding="0" cellspacing="0" width="100%" >
+                    <thead>
+                        <tr class="ui-table-head">
+                            <th class="ui-table-hcell" width="50">{:lang('item_id')}</th>
+                            <th class="ui-table-hcell" width="60">{:lang('item_number')}</th>
+                            <th class="ui-table-hcell">{:lang('name')}</th>
+                            <th class="ui-table-hcell" width="280">{:lang('action')}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <volist name="list" id="vo">
+                        <tr id="row-{$vo.id}">
+                            <td>{$vo.id}</td>
+							<td>{$vo.sn}</td>
+                            <td>
+								{$vo.name}
+								<notempty name="vo.image"><a href="{$vo.image|imageUrl}" title="{:lang('image')}" target="_blank"><img src="__PUBLIC__/Assets/img/pic.jpg" /></a></notempty>
+								<eq name="vo.is_hot" value="1"> <img src="__PUBLIC__/Assets/img/hot.gif" /></eq>
+							</td>
+                            
+                            <td class="action">
+								<q onclick="booking('{$vo.sn}','{$vo.name|strFilter}')" class="using">{:lang('booking')}</q>
+								
+								<!--a class="using" href="index.php?m=Order&a=admin&id={$vo.sn}&template=admin" target="_blank">{:lang('booking')}</a-->
+                            </td>
+                        </tr>
+                        </volist>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+          
+        <div class="ui-pager-bar clearfix" style="padding-left:10px;">
+			<div class="ui-pager" style="float:right">{$page}</div>
+		</div>
+		
+		</form>
+</div><!--.box-->
+<script type="text/javascript">
+
+function booking(id,title){
+	var url = "{:C('ALIZI_ROOT')}index.php?m=Order&a=admin&template=admin&id="+id;
+	$.open(url,{title:title,width:650,height:550})
+}
+function auth(id,title){
+	if(id===0){
+		var ids = new Array(),i=0;
+		 $(".itemId").each(function(){
+			var _this = $(this);
+			if(_this.attr("checked")=="checked"){ ids[i] =_this.val(); i++;}
+		})
+		id = ids.join();
+	}
+	var url = "?m=Item&a=auth&id="+id;
+	$.open(url,{title:'授权 - '+title,width:500,height:250})
+}
+function delConfirm(){
+	$.confirm('是否要删除？',function(){ 
+		$('#deleteform').submit();
+	},true)
+}
+</script>
+{:W("Foot")}   

@@ -1,0 +1,165 @@
+{:W("Main",array('module'=>MODULE_NAME,'action'=>ACTION_NAME,'do'=>$_GET['do']))} 
+<script type="text/javascript">
+isupload = false;
+function aliziUpload(fileInput){
+	if(isupload != false){
+		$.alert("其他文件正在上传...请稍后");
+	}else{
+		$(fileInput).click();
+	}
+}
+function uploadImg(fileInput,target){
+	var filename = $(fileInput).val();
+    if(filename != '' && filename != null){
+    	isupload = true;
+        var pic = $(fileInput)[0].files[0];
+		console.log(pic);
+        var fd = new FormData();
+        fd.append('imgFile', pic);
+        $.ajax({
+            url:'{:U("Public/upload")}',
+            type:"post",
+            dataType:'json',
+            data: fd,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success:function(data){
+                if(data.status=='1'){
+                    $(target).val(data.data);
+					$.alert('上传成功',1);
+                }else{
+					$.alert(data.data,0);
+				}
+            },
+            error:function (){
+				$.alert("上传出错了",0);
+            }
+        });
+        isupload = false;
+    }
+    isupload = false;
+}
+</script>
+<div class="layout-main">    
+    <div id="breadclumb" class="box">
+        <h3>
+        	<strong>{:lang('breadclumb_colon')}</strong>
+            {:lang('index')}<span></span>{:lang('advert_slideshow')}<span></span><empty name="_GET.id">{:lang('add')}<else />{:lang('edit')}</empty>
+        </h3>
+    </div>
+    <div class="box clear-fix">
+        <div class="layout-block-header"><h2>{:lang('details_info')}</h2></div>  
+        <div id="AccountInfo">
+            <div class="info-block">
+                <form method="post" action="{:U('Extend/proccess/')}" id="ajaxform" enctype="multipart/form-data">
+                <table class="info-table">
+                    <tbody>
+                        <tr>
+                            <th><b class="verifing">*</b>{:lang('title_name_colon')}</th>
+                            <td><input name="name" type="text" class="ui-text validate[required,minSize[2]]" value="{$info.name}" size="60"></td>
+                        </tr>
+                        <tr>
+                            <th><b class="verifing">*</b>{:lang('link_address_colon')}</th>
+                            <td>
+                            	<input name="link" type="text" class="ui-text validate[required]" value="<empty name="info.link">http://<else />{$info.link}</empty>" size="60">
+                            	<span class="ui-validityshower-info">（示例：http://www.baidu.com）</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{:lang('目标_colon')}</th>
+                            <td>
+                                <select name="target">
+                                	<option value="_blank">新窗口弹出</option>
+                                    <option value="_self" <eq name="info.target" value="_self">selected="selected"</eq>>本窗口跳转</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{:lang('status_colon')}</th>
+                            <td>
+                                <input type="radio" name="status" value="1" <neq name="info.status" value="0">checked="checked"</neq> />
+                                <label class="ui-group-label">{:lang('show')}</label>
+                                <input type="radio" name="status" value="0" <eq name="info.status" value="0">checked="checked"</eq> />
+                                <label class="ui-group-label">{:lang('hide')}</label>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <th>{:lang('sortorder_colon')}</th>
+                            <td>
+                                <input name="sort_order" type="text" class="ui-text" value="{$info.sort_order|intval}" size="4">
+                                <span class="ui-validityshower-info">（数字越小越靠前）</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{:lang('电脑版_image_colon')}</th>
+                            <td>
+                                <input name="banner" id="banner" type="text" class="ui-text" value="{$info.banner}" size="40" style="float:left">
+                                <button type="button" class="button" onclick="aliziUpload('#upload_banner')">上传图片</button>
+								<input type="file" class="hidden" id="upload_banner"  onchange="uploadImg('#upload_banner','#banner');" />
+								<span class="ui-validityshower-info">（电脑版图片大小：1000x400）</span>
+								
+								
+                            </td>
+                        </tr>
+						<tr>
+                            <th>{:lang('手机版_image_colon')}</th>
+                            <td>
+                                <input name="image" id="image" type="text" class="ui-text" value="{$info.image}" size="40" style="float:left">
+                                <button type="button" class="button" onclick="aliziUpload('#upload_image')">上传图片</button>
+								<input type="file" class="hidden" id="upload_image"  onchange="uploadImg('#upload_image','#image');" />
+								<span class="ui-validityshower-info">（手机版图片大小：640x335）</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{:lang('description_info_colon')}</th>
+                            <td>
+                                <textarea name="description" id="description" class="insert-text input-textarea" cols="80" rows="4">{$info.description}</textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <td>
+                                <empty name="info.id">
+									<input type="hidden" name="create_time" value="{:time()}">
+								<else />
+									<input type="hidden" name="id" value="{$info.id}" />
+								</empty>
+                                <input type="hidden" name="module" value="advert" />
+                                <input type="submit" class="btn btn-ok" value="{:lang('confirm')}" />
+                                <a class="btn" href="{$_SERVER['HTTP_REFERER']}">{:lang('goback')}</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </form>
+            </div>
+        </div>  
+    </div><!--.box-->
+    <link href="__PUBLIC__/Assets/js/validation/validationEngine.jquery.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="__PUBLIC__/Assets/js/validation/jquery.validationEngine.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Assets/js/validation/jquery.validationEngine-zh_CN.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Assets/js/jquery.form.js"></script>
+    <script type="text/javascript">
+    $(function(){
+        $("#ajaxform").validationEngine('attach', {promptPosition : "centerRight", autoPositionUpdate : true});	
+        $('#ajaxform').ajaxForm({
+            timeout: 15000,
+            error:function(){ $('#ajaxLoading').hide();alert("{:lang('ajaxError')}");},
+            beforeSubmit:function(){ $('#ajaxLoading').show();},
+            success:function(data){ 
+                $('#ajaxLoading').hide();
+                if(data.status==1){
+                    var redirectURL = "{$_SERVER['HTTP_REFERER']}";
+                    $.alert(data.info,data.status,function(){window.location.href=redirectURL});
+                }else{
+                    $.alert(data.info,data.status);
+                }
+            },
+            dataType: 'json'
+        });
+    });
+    </script>     
+       
+{:W("Foot")}   

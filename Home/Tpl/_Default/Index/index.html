@@ -1,0 +1,146 @@
+<extend name="/Order:alizi" />
+<block name="css">
+<link href="__PUBLIC__/Alizi/pc/alizi.css?v={$Think.const.ALIZI_VERSION}" rel="stylesheet">
+<script type="text/javascript">
+seajs.use(['jquery/lazyload'], function() {
+	$(".alizi-lazy").lazyload({ placeholder : "__PUBLIC__/Alizi/alizi.gif",effect : "fadeIn"});
+});
+</script>
+</block>
+<block name="body">
+<div class="pbody">
+	<include file="Index:header" />
+
+
+<div class="container">
+	<div class="mainwidth">
+		
+		<notempty name="slider">
+		<div class="newbanner">
+		  <div class="newflexslider">
+			<ul class="newslides">
+				<volist name="slider" id="vo">
+				<li><a href="{$vo.link}" target="{$vo.target}"><img src="{$vo.banner|imageUrl}" /></a></li>
+				</volist>
+			</ul>
+		  </div>
+		</div>
+		<script type="text/javascript">
+		seajs.use(['jquery/newflexslider'], function(){ $('.newflexslider').newflexslider({ directionNav: true, pauseOnAction: false,newslideshowSpeed:5000 });});
+		</script>
+		</notempty>
+		
+		
+
+
+	<notempty name="hot.list">
+	<div class="indprocon alizi-hot">
+		<div class="toptitle">
+			<span class="titlein"><strong>{:lang('newArrival')} / <span class="en">New Products</span></strong></span>
+		</div>
+		
+		<ul class="indprolist">
+			<volist name="hot.list" id="vo">
+			<li>
+				<div class="img">
+				<a href="{:U('Index/order',array('id'=>$vo['sn']))}">
+					<img src="{$vo.image|imageUrl}" class="alizi-lazy"><span></span>
+				</a>
+				</div>
+				<a href="{:U('Index/order',array('id'=>$vo['sn']))}" class="title ellipsis" title="{$vo.name}">{$vo.name}</a>
+				<p class="price">
+					<strong class="alizi-price">{$vo.price|getPrice}</strong>
+					<if condition="floatval($vo['original_price']) gt 0"><del>{$vo.original_price|getPrice}</del></if>
+				</p>
+				<span class="text">{$vo.brief}</span>
+			</li>
+			</volist>
+		</ul>
+	</div>
+	</notempty>
+
+	<php>
+	$category = M('Category')->where('type=1')->order('sort_order asc')->select();
+	</php>
+	<volist name="category" id="vo">
+		<php>
+			$id = intval($_GET['id']);
+			if($id && $id!=$vo['id']){continue;}
+			$limit = empty($id)?$aliziConfig['item_category_num']:1000;
+			$list = M('Item')->where('status=1 AND is_delete=0 AND category_id='.$vo['id'])->field('id,sn,name,image,price,brief')->order('sort_order asc')->limit($limit)->select();
+			if(empty($id) && empty($list)){continue;}
+		</php>
+		<div class="indprocon">
+			<div class="toptitle">
+				<span class="titlein"><a href="{:U('Item/category',array('id'=>$vo['id']))}" class="title"><strong>{$vo.name}</strong></a></span>
+			</div>
+		</div>
+ 
+		<ul class="indprolist">
+			<volist name="list" id="vo">
+			<li>
+				<div class="img">
+				<a href="{:U('Index/order',array('id'=>$vo['sn']))}">
+					<img src="{$vo.image|imageUrl}" class="alizi-lazy"><span></span>
+				</a>
+				</div>
+				<a href="{:U('Index/order',array('id'=>$vo['sn']))}" class="title ellipsis" title="{$vo.name}">{$vo.name}</a>
+				<span class="price">
+					<strong class="alizi-price">{$vo.price|getPrice}</strong>
+					<if condition="floatval($vo['original_price']) gt 0"><del>{$vo.original_price|getPrice}</del></if>
+				</span>
+				<span class="text">{$vo.brief}</span>
+			</li>
+			</volist>
+		</ul>
+	</volist>
+	
+	<php>
+		$category = M('Category')->where('type=2')->order('sort_order asc ,id asc')->limit(3)->select();
+		$isNull = true;
+		foreach($category as &$cate){
+			$list = M('Article')->where('is_delete=0 and status=1 and category_id='.$cate['id'])->order('sort_order asc ,id desc')->limit(10)->select();
+			if($list){
+				$isNull = false;
+				$cate['list'] = $list;
+			}
+		} 
+	</php>
+	<empty name="isNull">
+	<div class="indprocon">
+		<div class="toptitle">
+			<span class="titlein"><strong>{:lang('newsInfo')} / <span class="en">News Infomation</span></strong></span>
+		</div>
+		<div class="wrap clearfix">
+			<volist name="category" id="vo">
+			<div class="news-list">
+				
+				<div class="list-title">
+					<notempty name="vo.image">
+					<a href="{:U('Index/article',array('id'=>$vo['id']))}" title="{$vo.name}"><img src="{$vo.image|imageUrl}" alt="{$vo.name}"></a>
+					<else />
+					<a href="{:U('Index/article',array('id'=>$vo['id']))}" title="{$vo.name}">
+						<strong><span class="am-icon-book"></span> {$vo.name}</strong>
+					</a>
+					</notempty>
+				</div>
+				<ul>
+					<volist name="vo.list" id="li">
+					<li><a href="{:U('Index/detail',array('id'=>$li['id']))}" target="_blank">{$li.name}</a></li>
+					</volist>
+				</ul>
+			</div>
+			</volist>
+		</div>
+	</div>
+	</empty>
+	
+</div>
+    </div>
+<div id="downArrowBox"></div>
+</div>
+</block>
+
+<block name="foot">
+<include file="Index:footer" />
+</block>

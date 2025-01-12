@@ -1,0 +1,41 @@
+<html class="hairlines">
+<head>
+<meta charset="utf-8">
+<title>微营销平台</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="__PUBLIC__/Alizi/zui/css/zui.min.css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Alizi/user/style.css">
+</head>
+<body>
+
+<div class="register">
+	<div class="regTop">
+		<a href="index.php?m=User&a=items" class="back">返回</a>
+		<h2 class="alizi-title">商品推广</h2>
+	</div>
+		<php>$url = $main_domain.C('ALIZI_ROOT').'index.php?m=Order&a=index&tpl=detail&id='.$info['sn'].'&uid='.$_SESSION['member']['id'];$qrcode = urlencode($url);</php>
+	  <div class="content">
+		<div class="profile">
+			<h3 class="qr_m"><a href="{$url}" target="_blank">{$info.name}</a></h3>
+			<div id="qrcode"  style="margin:0 auto; width:220px;height:220px;"><img src="{:C('Alizi_ROOT')}Api/qrcode.php?data={$qrcode}"></div>
+		 
+			<div id="code">				
+			<canvas id="canvas" width="220" height="220"></canvas></div>
+			<p class="qr_m">长按保存推广码图片</p> 
+		</div>
+	</div>
+		
+</div>
+<script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>  
+<script>
+$(function(){
+	var url = "{:C('ALIZI_ROOT')}index.php?m=Order&a=index&tpl=detail&id={$info['sn']}&uid={$_SESSION['member']['id']}&buildHtml";
+	$.ajax({url:url,timeout:1000});
+})
+</script>  
+
+</body>
+</html>

@@ -1,0 +1,3 @@
+<?php
+//000000864000a:11:{s:2:"id";s:2:"10";s:5:"theme";s:4:"thin";s:8:"template";s:0:"";s:7:"options";s:94:"["product","extends","quantity","price","name","mobile","region","address","remark","payment"]";s:5:"width";s:5:"750px";s:11:"show_notice";s:1:"0";s:13:"show_comments";s:1:"0";s:4:"info";N;s:5:"color";s:132:"{"body_bg":"F4F4F4","form_bg":"FFFFFF","title_bg":"666666","button_bg":"FF6600","font":"333333","border":"AAAAAA","nav_bg":"EE3300"}";s:12:"redirect_uri";s:0:"";s:6:"extend";s:84:"a:2:{s:7:"padding";N;s:15:"bottom_nav_list";a:3:{i:1;s:0:"";i:2;s:0:"";i:3;s:0:"";}}";}
+?>

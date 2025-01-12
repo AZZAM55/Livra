@@ -1,0 +1,59 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+
+RewriteRule ^index.html$ index.php?m=Index&a=index [L]
+RewriteRule ^id/(\w+).html$ index.php?m=Index&a=order&id=$1 [L]
+RewriteRule ^query.html$ index.php?m=Index&a=query [L]
+RewriteRule ^category.html$ index.php?m=Index&a=category [L]
+RewriteRule ^category-([0-9]+).html$ index.php?m=Index&a=category&id=$1 [L]
+RewriteRule ^category(.*)/p/([0-9]+).html$ index.php?m=Index&a=category&cid=$1&p=2 [L]
+RewriteRule ^article.html$ index.php?m=Index&a=article [L]
+RewriteRule ^article-([0-9]+).html$ index.php?m=Index&a=article&id=$1 [L]
+RewriteRule ^detail-([0-9]+).html$ index.php?m=Index&a=detail&id=$1 [L]
+RewriteRule ^Index/category/p/([0-9]+).html$ index.php?m=Index&a=category&p=$1 [L]
+RewriteRule ^Index/category/id/([0-9]+)/p/([0-9]+).html$ index.php?m=Index&a=category&id=$1&p=$2 [L]
+
+RewriteRule ^single/(\w+).html$ index.php?m=Order&a=index&id=$1 [L]
+RewriteRule ^single/(\w+)-([0-9]+).html$ index.php?m=Order&a=index&id=$1&uid=$2 [L]
+RewriteRule ^detail/(\w+).html$ index.php?m=Order&a=index&tpl=detail&id=$1 [L]
+RewriteRule ^detail/(\w+)-([0-9]+).html$ index.php?m=Order&a=index&tpl=detail&id=$1&uid=$2 [L]
+
+RewriteRule ^result/([0-9]+).html$ index.php?m=Index&a=result&order_no=$1 [L]
+RewriteRule ^pay-([0-9]+).html$ index.php?m=Index&a=pay&order_no=$1 [L]
+
+RewriteRule ^single/(.*)-([0-9]+).html$ index.php?m=Order&a=index&id=$1&uid=$2 [L]
+RewriteRule ^single/(.*).html$ index.php?m=Order&a=index&id=$1 [L]
+RewriteRule ^detail/(.*)-([0-9]+).html$ index.php?m=Order&a=index&tpl=detail&id=$1&uid=$2 [L]
+RewriteRule ^detail/(.*).html$ index.php?m=Order&a=index&tpl=detail&id=$1 [L]
+RewriteRule ^a/([0-9]+)$ Api/confirm.php?id=$1 [L]
+
+#RewriteRule ^(.*).html$ index.php?s=$1 [QSA,PT,L]
+
+RewriteRule ^Order/id-(.*).html$ index.php?m=Order&a=pay&order_no=$1 [L]
+RewriteRule ^Order/wxpay-(.*).html$ index.php?m=Order&a=payWxPayJsApi&order_id=$1 [L]
+RewriteRule ^Order/orderQuery-(.*).html$ index.php?m=Order&a=orderQuery&order_no=$1 [L]
+RewriteRule ^Order/orderQuery.html$ index.php?m=Order&a=orderQuery [L]
+RewriteRule ^Order/result/order_no/(.*).html$ index.php?m=Order&a=result&order_no=$1 [L]
+RewriteRule ^Order/result/order_no/(.*)/uid/(.*).html$ index.php?m=Order&a=result&order_no=$1&uid=$2 [L]
+RewriteRule ^Order/payWxPayWap-([0-9]+).html$ index.php?m=Order&a=payWxPayWap&order_id=$1 [L]
+
+RewriteRule ^item/id-(.*).html$ index.php?m=Item&a=order&id=$1 [L]
+RewriteRule ^item/index.html$ index.php?m=Item&a=index [L]
+RewriteRule ^item/query.html$ index.php?m=Item&a=query [L]
+RewriteRule ^item/category.html$ index.php?m=Item&a=category [L]
+RewriteRule ^item/category-(.*).html$ index.php?m=Item&a=category&cid=$1 [L]
+RewriteRule ^item/category(.*)/p/([0-9]+).html$ index.php?m=Item&a=category&cid=$1&p=2 [L]
+RewriteRule ^item/getCategoryList.html$ index.php?m=Item&a=getCategoryList [L]
+RewriteRule ^item/article.html$ index.php?m=Item&a=article [L]
+RewriteRule ^item/detail-(.*).html$ index.php?m=Item&a=detail&id=$1 [L]
+
+RewriteRule ^wap/id-(.*).html$ index.php?m=Wap&a=order&id=$1 [L]
+RewriteRule ^wap/index.html$ index.php?m=Wap&a=index [L]
+RewriteRule ^wap/query.html$ index.php?m=Wap&a=query [L]
+RewriteRule ^wap/category.html$ index.php?m=Wap&a=category [L]
+RewriteRule ^wap/category-([0-9]+).html$ index.php?m=Wap&a=category&cid=$1 [L]
+RewriteRule ^wap/category(.*)/p/([0-9]+).html$ index.php?m=Wap&a=category&cid=$1&p=2 [L]
+RewriteRule ^wap/article.html$ index.php?m=wap&a=article [L]
+RewriteRule ^wap/detail-(.*).html$ index.php?m=wap&a=detail&id=$1 [L]

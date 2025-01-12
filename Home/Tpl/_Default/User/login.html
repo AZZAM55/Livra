@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>{$aliziConfig.title}</title>
+	<meta name="format-detection" content="telephone=no, address=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-touch-fullscreen" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="keywords" content="{$aliziConfig.keywords}" />
+	<meta name="description" content="{$aliziConfig.description}" />
+	<link rel="stylesheet" href="https://cdn.bootcss.com/twitter-bootstrap/3.2.0/css/bootstrap.min.css">
+	<style>
+		body{background:#d2e6e9;}
+		.panel{margin:.5em; border:none;}
+		.panel-info>.panel-heading {background: -webkit-gradient(linear, 0 0, 100% 0, from(#ebebeb), to(#f3f9fa), color-stop(30%, #f5f9f9)); color:#666666; border:none;}
+		a{color:#666666;}a:hover{color: #3ebacc;}
+		.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus{color: #3ebacc;}
+		.actions{margin:.8em auto;}
+		.nav.nav-tabs{margin-bottom:.8em;}
+		.btn.btn-primary{background: #56c6d6; color: #FFF; border: 0;}
+		.footer{position:static; width:100%; height:50px; color:#28b0e4; text-align:center; font-size:16px; margin-top:88px;}
+	</style>
+</head>
+<body>
+
+
+<div class="container-fill">
+		
+		<div style="text-align:center;">
+	<br/>
+            <div style="height: 44px;line-height: 44px;">
+              <a href="#/">
+                <span style="font-size: 33px; font-weight: 400; color:rgba(0,0,0,.85);">会员营销平台</span></a>
+            </div>
+            <div style="font-size: 14px;color: rgba(0,0,0,.45);margin-top: 12px;margin-bottom: 20px;">营销平台助力订单推广</div>
+	</div>
+
+	<div class="panel panel-info ng-container ng-scope" ng-controller="loginPanel">
+		<div class="panel-heading">
+			<h4>{:Lang('user_login')}</h4>
+		</div>
+		<div class="panel-body">
+		<form name="form1" method="post" class="ng-pristine ng-valid" id="form1" action="{:C('ALIZI_ROOT')}index.php?m=User&a=login">
+			<ul class="nav nav-tabs">
+				<li class="active"><a href="javascript:;">{:Lang('user_login')}</a></li>	
+				<notempty name="aliziConfig.agent_register">
+				<li><a href="?m=User&a=register">{:Lang('register')}</a></li>
+				</notempty>				
+			</ul>
+			<div class="tab-content">
+					<div class="tab-pane animated fadeInLeft active" id="basic">
+						<div class="form-group has-feedback">
+							<input type="text" class="form-control ng-pristine ng-untouched ng-valid" id="username" name="username" placeholder="{:Lang('username')}" >
+						</div>
+						<div class="form-group has-feedback">
+							<input type="password" class="form-control ng-pristine ng-untouched ng-valid" id="password" name="password"  placeholder="{:Lang('password')}">
+						</div>
+					</div>
+						</div>
+			<button type="submit" class="btn btn-primary btn-block">{:Lang('login')}</button>
+		</form>
+		</div>
+		
+		
+	</div>
+</div>
+
+<div class="center-block footer">
+		<div class="text-center">
+			<p style="margin-top:5px;">{$aliziConfig.footer}</p>
+		</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="telephone=no" name="format-detection" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="viewport" content="width=320, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<style type="text/css">
+.timeBox{ font-size:12px;  color:#999; height:30px;line-height:30px; overflow: hidden; text-align:center; margin-left:10px;}
+.timeBox strong{ font-size:20px; padding:3px 5px; height:20px; line-height:20px;  font-weight:bold; background:#1D191A; border-radius:5px; color:#fff; display:inline-block; font-weight:normal; margin:0px 5px 0px 0px; font-style:normal  }
+.time{margin-left:10px;margin-top: 5px;}
+
+</style>
+    </script>
+<script type="text/javascript">
+	var _hmt=_hmt||[];(function(){var e=document.createElement("script");
+	var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();
+	document.write('<div id="global_loading" style="width: 100%;height: 100%;position: fixed;top: 0;left: 0;background-color: #eee;z-index:999"><div style="width: 100px;height: 75px;margin:auto;top:50%;position:relative"><span style="display:block;float:left;width:32px;height:32px;background:url(images/spacer.gif);margin-top:-5px;"></span>&nbsp;&nbsp;加载中...</div></div>');
+	</script>
+<script type="text/javascript">
+function $id(element) {
+  return document.getElementById(element);
+}
+//切屏--是按钮，_v是内容平台，_h是内容库
+function reg(str){
+  var bt=$id(str+"_b").getElementsByTagName("h2");
+  for(var i=0;i<bt.length;i++){
+    bt[i].subj=str;
+    bt[i].pai=i;
+    bt[i].style.cursor="pointer";
+    bt[i].onclick=function(){
+      $id(this.subj+"_v").innerHTML=$id(this.subj+"_h").getElementsByTagName("blockquote")[this.pai].innerHTML;
+      for(var j=0;j<$id(this.subj+"_b").getElementsByTagName("h2").length;j++){
+        var _bt=$id(this.subj+"_b").getElementsByTagName("h2")[j];
+        var ison=j==this.pai;
+        _bt.className=(ison?"":"h2bg");
+      }
+    }
+  }
+  $id(str+"_h").className="none";
+  $id(str+"_v").innerHTML=$id(str+"_h").getElementsByTagName("blockquote")[0].innerHTML;
+}
+
+function changeAtt(t) {
+t.lastChild.checked='checked';
+for (var i = 0; i<t.parentNode.childNodes.length;i++) {
+        if (t.parentNode.childNodes[i].className == 'cattsel') {
+            t.parentNode.childNodes[i].className = '';
+        }
+    }
+t.className = "cattsel";
+changePrice();
+}
+</script>
+</head>
+<body bgcolor="#FFFFFF";>
+<div class="time"> 
+<div align="left">剩余时间： <font id="end_timeB" class="timeBox"></font>
+  
+</div>
+<section class="sp"></section>
+<div align="left">
+  <script type="text/javascript">
+		var global_loading=document.getElementById("global_loading");
+		global_loading.parentNode.removeChild(global_loading);
+</script> 
+  <script type="text/javascript">
+
+
+function countDown(fn )  
+{      
+   var timer = setInterval(function()  
+   {  
+       var huoDate = new Date();
+var enddatetime="2016-"+(huoDate.getMonth()+1)+"-"+huoDate.getDate()+"-23-59-59";
+var end_date = enddatetime.split('-');
+var endtime = new Date(end_date[0],end_date[1]-1,end_date[2],end_date[3],end_date[4],end_date[5]);
+function GetRTime()
+{  
+    NowTime = new Date();  
+    var nMS = endtime - NowTime.getTime();
+    var nD = Math.floor(nMS / (1000 * 60 * 60 * 24));  
+    var nH = Math.floor(nMS / (1000 * 60 * 60)) % 24-1;  
+    var nM = Math.floor(nMS / (1000 * 60)) % 60;  
+    var nS = Math.floor(nMS / 1000) % 60;  
+    var nMS = Math.floor(nMS % 1000)%10;  
+    if (nD >= 0)  
+    {
+		nH=(nH+1)%24;		
+		fn("<strong>"+nH+"小时</strong><strong>"+nM+"分钟</strong><strong>"+nS+"."+nMS+"秒</strong>");
+
+    }  
+    else {  
+       fn("<strong>活动结束</strong>");
+    }  
+    setTimeout("GetRTime()", 100);  
+}
+GetRTime();
+    }, 100);  
+}  
+
+
+    countDown(function( msg )  
+    {  
+        document.getElementById('end_timeB').innerHTML = msg;  
+    }) 
+
+function changePrice()
+{
+  var attr = getSelectedAttributes(document.forms['ECS_FORMBUY']);
+  var qty = document.forms['ECS_FORMBUY'].elements['number'].value;
+  Ajax.call('index-1.htm'/*tpa=*/, 'act=price&id=' + goodsId + '&attr=' + attr + '&number=' + qty, changePriceResponse, 'GET', 'JSON');
+}
+/**
+ * 接收返回的信息
+ */
+function changePriceResponse(res)
+{
+  if (res.err_msg.length > 0)
+  {
+    alert(res.err_msg);
+  }
+  else
+  {
+    document.forms['ECS_FORMBUY'].elements['number'].value = res.qty;
+    if (document.getElementById('ECS_GOODS_AMOUNT'))
+      document.getElementById('ECS_GOODS_AMOUNT').innerHTML = res.result;
+  }
+}
+/*
+*选择信息处理
+*/
+function changeP(b, c) {
+	var frm=document.forms['ECS_FORMBUY'];
+	var cur_id="";
+    document.getElementById('spec_value_' + c).checked=true;
+	document.getElementById('url_' + c).className="selected";
+	for (var i = 0; i < frm.elements[b].length; i++) {
+		cur_id=frm.elements[b][i].id.substr(11);
+        document.getElementById('url_' + cur_id).className="";
+		if (frm.elements[b][i].checked)
+		{
+		   document.getElementById('url_' + c).className="selected";
+		}
+    }
+	changePrice();
+}
+</script>
+</div>
+</body></html>

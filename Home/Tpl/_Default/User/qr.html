@@ -1,0 +1,34 @@
+<html class="hairlines">
+<head>
+<meta charset="utf-8">
+<title>我的活码</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="__PUBLIC__/Alizi/zui/css/zui.min.css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Alizi/user/style.css">
+<style>
+	body{background:#FFF}
+	.profile{border:0;}
+	#qrcode{max-width:100%;}
+</style>
+</head>
+<body>
+
+
+<!--#28b0e4-->
+<div class="register">
+	
+	<div class="content">
+		<div class="profile" style="margin:0;border-radius:0;padding:10px 0;">
+			<div class="weui_icon_safe_success" style="text-align:center;padding-bottom:20px;color:#04be02;font-size:16px;"><img src="__PUBLIC__/Alizi/user/safety.png" width="20" /> 二维码已通过微信团队安全认证</div>
+			
+			<div class="qrcode" style="text-align:center;">
+				<img src="{$qrcode.image|imageUrl}" id="qrcode">
+			</div> 
+		</div>	
+	</div>		
+</div>
+</body>
+</html>

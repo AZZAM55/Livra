@@ -1,0 +1,48 @@
+<extend name="alizi" />
+<block name="body">
+<style>.alizi-request{display:none;}</style>
+<div class="alizi-order-wrap clearfix">
+    <div class="alizi-detail-wrap">
+        {$info.content}
+        <script type="text/javascript">
+        seajs.use(['alizi','jquery/form','lang'],function(alizi){
+            window.alizi = alizi;
+            alizi.quantity(0);
+            var btnSubmit = $('.alizi-submit');
+            $('#aliziForm').ajaxForm({
+                cache: true,
+                timeout: 50000,
+                dataType: 'json',
+                error:function(){ layer.closeAll(); alert(lang.ajaxError); btnSubmit.attr('disabled',false).val(lang.submit); },
+                beforeSubmit:function(){
+                    if(checkForm('#aliziForm')==false) return false;
+                    layer.closeAll();layer.load();
+                    //btnSubmit.attr('disabled',true).val(lang.loading);
+                },
+                success:function(data){
+                    layer.closeAll();layer.closeAll();
+                    if(data.status=='1'){
+						layer.msg('下单成功',{ icon: 1,time: 1500},function(){ location.reload();});
+                    }else{
+                        btnSubmit.attr('disabled',false).val(lang.submit);
+                        layer.msg(data.info);
+                    }
+                }
+            });
+        });
+        if(self!=top){
+            height();window.onresize=function(){height();}
+            function height(){ try{var height=parseInt(document.body.clientHeight);parent.window.document.getElementById("aliziIframe").height = height;}catch (ex){console.log(ex);}}
+        }
+        </script>
+    </div>
+</div>
+
+<if condition="cookie('fbpid')">
+<script>
+fbq('track', 'AddToCart'); 
+</script>
+</if>
+
+
+</block>

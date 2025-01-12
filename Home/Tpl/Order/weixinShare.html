@@ -1,0 +1,39 @@
+<if condition="isWeixin() eq true && $aliziConfig['weixin_status'] eq 1">
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript">
+
+var appid='{$weixin.appId}',
+	timestamp={$weixin.timestamp},
+	nonceStr="{$weixin.nonceStr}",
+	signature="{$weixin.signature}",
+	title='{$info.name}',
+	description='{$info.brief}',
+	link='{$url.link}',
+	imgUrl='{$info.image|imageUrl}',
+	order='{$url.order}';
+
+wx.config({
+	debug: true,
+	appId: appid,
+	timestamp: timestamp,
+	nonceStr: nonceStr,
+	signature: signature,
+	jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','hideMenuItems',]
+});
+wx.ready(function(){
+	//wx.hideMenuItems({menuList: ["menuItem:favorite","menuItem:share:qq","menuItem:share:weiboApp","menuItem:copyUrl","menuItem:openWithQQBrowser","menuItem:openWithSafari","menuItem:share:email"],});
+	var shareData = {
+		title: title,
+		desc: description,
+		link: link,
+		imgUrl: imgUrl,
+		success: function () {window.location.href =order; }
+	};
+	wx.onMenuShareAppMessage(shareData);
+	wx.onMenuShareTimeline(shareData);
+});
+wx.error(function (res) {
+	alert(res.errMsg);
+});
+</script>
+</if>

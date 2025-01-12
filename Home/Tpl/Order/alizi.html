@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html <if condition="C('DEFAULT_LANG') EQ 'arab'"> dir="rtl"</if>>
+<head><block name="head">
+<title>
+	<notempty name="info.name">{$info.name}<else />
+	<switch name="ACTION_NAME">
+		<case value="category">{:lang('item_category')} - </case>
+		<case value="query">{:lang('order_query')} - </case>
+		<case value="article">{$_GET.id|getFields='Category','name',###} - </case>
+	</switch>
+	{$aliziConfig.title}
+	</notempty>
+</title>
+<meta charset="utf-8" />
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="yes" name="apple-touch-fullscreen"/>
+<meta content="telephone=no" name="format-detection"/>
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0, user-scalable=no" name="viewport">
+<meta name="description" content="<empty name='info.brief'>{$aliziConfig.description}<else />{$info.brief}</empty>">
+<meta name="keywords" content="<notempty name="info.tags">{:str_replace('#',',',$info['tags'])},</notempty>{$aliziConfig.keywords}">
+<link rel="shortcut icon" href="{$aliziConfig.alizi_host}{:C('ALIZI_ROOT')}alizi.ico?v={$Think.const.ALIZI_VERSION}" />
+<link href="__PUBLIC__/Alizi/amazeui/css/amazeui.min.css?v={$Think.const.ALIZI_VERSION}" rel="stylesheet" type="text/css" />
+<link href="{$aliziConfig.alizi_host}__PUBLIC__/Alizi/alizi-order.css?v={$Think.const.ALIZI_VERSION}" rel="stylesheet">
+<notempty name="template.template"><link href="{$aliziConfig.alizi_host}{:C('ALIZI_ROOT')}Home/Tpl/Alizi/{$template['template']}/assets/alizi.css?v={$Think.const.ALIZI_VERSION}" rel="stylesheet"></notempty>
+<!--[if lt IE 9]><link href="{$aliziConfig.alizi_host}__PUBLIC__/Alizi/alizi-ie.css?v={$Think.const.ALIZI_VERSION}" rel="stylesheet"><![endif]-->
+<script type="text/javascript" src="{$aliziConfig.alizi_host}__PUBLIC__/Alizi/seajs/seajs/sea.js?v={:C('ALIZI_VERSION')}"></script>
+<script type="text/javascript">
+var aliziHost = "{$aliziConfig.alizi_host}",aliziRoot = "{$aliziConfig.alizi_host}{:C('ALIZI_ROOT')}",aliziVersion="{$Think.const.ALIZI_VERSION}",lang="{:C('DEFAULT_LANG')}";
+seajs.config({ base: '{$aliziConfig.alizi_host}__PUBLIC__/Alizi/seajs/',alias: {'jquery': 'jquery/jquery','alizi': 'alizi/alizi','lang': 'alizi/lang-'+lang}, map: [['.css', '.css?v=' + aliziVersion]]});
+function traceExpress(com,num,order_id,order_no){
+	window.location.href= "{:C('ALIZI_ROOT')}index.php?m=Order&a=traceExpress&com="+com+"&num="+num+"&order_id="+order_id+"&order_no="+order_no;
+}
+</script>
+<if condition="isset($info['header'])">{$info.header}</if>
+<if condition="session('fbpid')">
+<php>$fbpid = explode(',',session('fbpid'));</php>
+<!-- Facebook Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+<volist name="fbpid" id="fb">
+fbq('init', '{$fb}'); 
+</volist>
+fbq('track', 'PageView');
+fbq('track', 'ViewContent');
+</script>
+<noscript>
+<volist name="fbpid" id="fb">
+<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id={$fb}&ev=PageView&noscript=1" />
+</volist>
+</noscript>
+<!-- End Facebook Pixel Code -->
+</if>
+</block>
+<block name="css">
+<php>
+$color = $template['color'];
+</php>
+<style>
+.alizi-border,.alizi-side.alizi-full-row{ border-color:#{$aliziConfig['theme_color']};}
+<if condition="isset($template['width'])">.alizi-detail-wrap{ max-width:{$template.width} !important;}</if>
+<if condition="!empty($color)">
+body,.alizi-order-wrap{ background-color:#{$color.body_bg};}
+.alizi-detail-content h2{ border-top-color:#{$color.body_bg};}
+.alizi-border,.alizi-side.alizi-full-row{ border-color:#{$color.border};}
+.alizi-detail-header dt{ color:#{$color.font};}
+.alizi-order{ color:#{$color.font};background-color:#{$color['form_bg']};}
+.alizi-title{ background-color:#{$color.title_bg};}
+.alizi-btn,.alizi-btn:hover, .alizi-btn:active,.alizi-badge,.alizi-params.active,.alizi-group-box input:checked + label:after{ background-color:#{$color['button_bg']};border-color:#{$color.button_bg};}
+.alizi-foot-nav{ background-color:#{$color.nav_bg};}
+.alizi-group.alizi-params.alizi-checkbox.active:hover{ background-color:#{$color.button_bg} !important;border-color:#{$color.button_bg} !important;color:#fff !important;}
+</if>
+</style>
+</block>
+</head>
+<body <if condition="C('DEFAULT_LANG') EQ 'arab'"> class="arab"</if>>
+
+<notempty name="aliziConfig.notice">
+<div class="aliziAlert" style="position: fixed; "><a class="close" onclick="$('.aliziAlert').slideUp(500);">×</a>{$aliziConfig.notice}</div>
+<div class="aliziAlert">&nbsp;</div>
+</notempty>
+<block name="body"></block>
+<block name="foot"></block>
+<if condition="isset($_GET['buildHtml'])">
+<script type="text/javascript">
+seajs.use(['jquery/query','jquery/cookie'],function(){var ac = $.query.get('ac');ac=ac?ac:$.query.get('gzid');if(ac){ $.cookie('ac',ac);$('input[name=channel_id]').val(ac);}})
+</script>
+</if>
+<notempty name="aliziConfig.contact_line">
+<a href="{$aliziConfig.contact_line}" target="_blank" style="display:inline-block;position: fixed;z-index:100;right:10px;bottom:100px;">
+<img src="__PUBLIC__/Alizi/line.png" />
+</a>
+</notempty>
+</body>
+</html>

@@ -1,0 +1,124 @@
+{:W("Main",array('module'=>MODULE_NAME,'action'=>ACTION_NAME))}
+<div class="layout-main">    
+    <div class="layout-block-header box overview-head">
+        <h2 class="overview-username">{$_SESSION.user.username}{:lang('comma_hello')}</h2>
+        <div id="OverviewOptimizeAdvice" style="line-height:2em;padding-top:10px;">
+            <p>{:lang('last_login_time_colon')}{$_SESSION.user.login_time}</p>
+            <p>{:lang('last_login_ip_colon')}{$_SESSION.user.login_ip}</p>
+			<p>当前版本：{:C('ALIZI_VERSION')}<span id="version"></span></p>
+			<eq name="_SESSION['user']['role']" value="admin">
+			<p>
+				短信余额：<b class="alert" id="sms-balance">0</b>
+				<a href="http://www.wxrob.com/index.php?m=Admin&c=Login&a=index&username={$aliziConfig.sms_account}&password={$aliziConfig.sms_password}" target="_blank" class="button">【充值】</a>
+			</p>
+			<php>$update = file_exists('./Public/Database/update.lock');</php>
+			<notempty name="update">
+			<p><a class="btn btn-ok" href="{:U('Version/index')}">系统升级</a></p>
+			</notempty>
+			</eq>
+        </div>
+    </div>
+	<!--
+	<div class="layout-block-header box overview-head">
+        <h2 class="overview-username">阿狸子声明</h2>
+        <div id="OverviewOptimizeAdvice" style="font-size:14px;line-height:1.8em;padding-top:10px;">
+            <p>1、时时订单管理系统，作者：<b>justo2008</b>（旺旺号），
+				官方店铺：<a href="https://www.wxrob.com/" target="_blank">https://www.wxrob.com</a>，
+				官方网址：<a href="http://www.wxrob.com/" target="_blank">www.wxrob.com</a>
+			</p>
+			<p>2、在使用过程中，若发现bug或需要添加功能，请联系作者。</p>
+			<p>3、本系统仅供自己使用，禁止传播和倒卖！</p>
+        </div>
+    </div>
+	-->
+	
+	<div class="box clear-fix">   
+        <div class="ui-table">
+            <div class="ui-table-body ui-table-body-hover">
+                <table cellpadding="0" cellspacing="0" width="100%" >
+                    <thead>
+                        <tr class="ui-table-head">
+                            <th class="ui-table-hcell">今日统计</th>
+							<volist name="today" id="vo">
+                            <th class="ui-table-hcell">{$vo.name}</th>
+							</volist>
+                            <th class="ui-table-hcell">订单总计</th>
+                            <th class="ui-table-hcell">访问量(PV)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>数量</td>
+							<volist name="today" id="vo">
+							<php>$total_quantity += intval($vo['quantity']);</php>
+                            <td>{$vo.quantity|intval}</td>
+							</volist>
+                            <td>{$total_quantity}</td>
+                            <td>{$today_pv|intval}</td>
+                        </tr>
+						<tr>
+                            <td>金额</td>
+                            <volist name="today" id="vo">
+							<php>$total_price += intval($vo['price']);</php>
+                            <td>{$vo.price|number_format=2}</td>
+							</volist>
+                            <td>{$total_price|number_format=2}</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+	</div><!--.box-->
+	
+	<div class="box clear-fix">   
+        <div class="ui-table">
+            <div class="ui-table-body ui-table-body-hover">
+                <table cellpadding="0" cellspacing="0" width="100%" >
+                    <thead>
+                        <tr class="ui-table-head">
+                            <th class="ui-table-hcell">昨日统计</th>
+							<volist name="yesterday" id="vo">
+                            <th class="ui-table-hcell">{$vo.name}</th>
+							</volist>
+                            <th class="ui-table-hcell">订单总计</th>
+                            <th class="ui-table-hcell">访问量(PV)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>数量</td>
+							<volist name="yesterday" id="vo">
+							<php>$total_quantity_yesterday += intval($vo['quantity']);</php>
+                            <td class="ui-table-hcell">{$vo.quantity|intval}</td>
+							</volist>
+                            <td>{$total_quantity_yesterday}</td>
+                            <td>{$yesterday_pv|intval}</td>
+                        </tr>
+						<tr>
+                            <td>金额</td>
+                            <volist name="yesterday" id="vo">
+							<php>$total_price_yesterday += intval($vo['price']);</php>
+                            <td class="ui-table-hcell">{$vo.price|number_format=2}</td>
+							</volist>
+                            <td>{$total_price_yesterday|number_format=2}</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+	</div><!--.box-->
+<script type="text/javascript">
+$(function(){
+	$.ajax({
+	   type: "GET",
+	   url: "{:U('Index/smsBalance')}",
+	   dataType: "json",
+	   success:function(data){
+			$('#sms-balance').html(data.data);
+		}
+	});
+})
+</script>
+	{:W("Foot")}

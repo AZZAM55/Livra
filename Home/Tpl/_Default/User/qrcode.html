@@ -1,0 +1,72 @@
+<html class="hairlines">
+<head>
+<meta charset="utf-8">
+<title>商品列表</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="__PUBLIC__/Alizi/zui/css/zui.min.css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Alizi/user/style.css">
+<style>
+	.profile{border:none;}
+	.items .item-content>.media.pull-left{max-width:80px;}
+	.item-brief a{color:#666;}
+</style>
+</head>
+<body>
+
+
+<!--#28b0e4-->
+<div class="register">
+	<div class="regTop">
+		<a href="index.php?m=User&a=index" class="back">返回</a>
+		<h2 class="alizi-title">活码管理</h2>
+		<a href="{:C('ALIZI_ROOT')}index.php?m=User&a=qrcode&do=add" class="btn btn-sm btn-danger" style="position:absolute;right:0;margin:8px;"><span class="icon-plus-sign"></span> 创建</a>
+	</div>
+	
+	  <div class="content">
+	  
+		
+		<div class="profile" style="margin:0;padding:10px;border-radius:0;">
+			<div class="items">
+				<volist name="list" id="vo">
+				<div class="item">
+				  
+				  <div class="item-content">
+					<div class="media pull-left">
+						<php>$url = $main_domain.C('ALIZI_ROOT').'index.php?m=User&a=qr&sid='.$vo['sid'];$qrUrl = urlencode($url);</php>
+						<img src="{:C('ALIZI_ROOT')}Api/qrcode.php?margin=0&data={$qrUrl}" alt="{$vo.name}">
+					</div>
+					<div class="text">
+						<div class="item-heading">
+							<div class="pull-right label label-badge label-warning">{$vo.pv|intval}</div>
+							<h4>{$vo.name}</h4>
+						</div>
+						<div class="item-brief">二维码：{$vo.count|intval} 张</div>
+						<div class="item-btn" style="margin-top:6px;">
+							<a href="{:C('ALIZI_ROOT')}index.php?m=User&a=qrcode&do=edit&sid={$vo.sid}" class="btn btn-sm btn-info" style="margin-right:5px;"><span class="icon-edit"></span> 编辑</a>
+							<a href="{:C('ALIZI_ROOT')}index.php?m=User&a=qrcode&do=delete&sid={$vo.sid}" class="btn btn-sm" onclick="return isDelete();"><span class="icon-trash"></span> 删除</a>
+						</div>
+					</div>
+				  </div>
+				</div>
+				</volist>		
+			</div>
+
+			
+		</div>
+	</div>
+		
+</div>
+<script>
+function isDelete(){
+	if(confirm('是否删除？')){
+		return true;
+	}else{
+		return false;
+	}
+}
+</script>
+</body>
+</html>

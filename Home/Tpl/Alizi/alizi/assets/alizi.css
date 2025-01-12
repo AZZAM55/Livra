@@ -1,0 +1,59 @@
+/*
+ * 标题：时时订单系统
+ * 作者：47478439（QQ号）
+ * 官方网址：www.wxrob.com
+ * 官方店铺：https://www.wxrob.com/
+ * 警示信息：您可以复制使用本站静态文件（html/css/js/images），但请保留原创作者（47478439（QQ号））信息，谢谢。
+ */
+*{margin:0;padding:0;}
+body{margin:0;padding:0;background-image:url("bg.jpg");background-attachment:fixed;background-size:cover;background-position:center;font:14px/1.5 "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei", serif}
+h1{font-size:20px}
+h2{font-size:16px}
+a{color:#EB5F3E;text-decoration:none}
+a:hover{text-decoration:underline}
+.alizi-order-wrap{background-color:transparent !important;}
+.label{background:#EB5F3E;padding:5px 8px;border-radius:3px;font-size:12px;color:#fff;vertical-align:middle}
+.wrapper{background-color:#f1f1f1;background-color:rgba(255, 255, 255, .2);max-width:750px;margin:0 auto}
+.header{padding:10px 20px;border-bottom:1px solid #ccc;border-bottom:1px solid rgba(255, 255, 255, .1);color:#fff;}
+.alizi-detail-content{padding:0 10px;}
+.alizi-page{padding:1px 0}
+.alizi-page img{max-width:100%;}
+.alizi-page .box{margin:15px 10px;padding:5px 0;background:#fff}
+.alizi-page .box a:hover{text-decoration:none}
+.alizi-page .box a:hover span{text-decoration:underline}
+.alizi-page .box a:hover .label{text-decoration:none}
+.alizi-page .box h2.title{margin:0;padding:5px 10px;border-bottom:1px solid #ccc;font-weight:normal;background: url(vline.jpg) no-repeat 15px center;padding-left: 27px;}
+.alizi-page .box-image .box-content{text-align:center;}
+.alizi-page .box .box-content table.links{margin-top:-1px;width:100%;border-spacing:0;border-collapse:collapse}
+.alizi-page .box .box-content table.links td{padding:3px 3px 3px 10px;border:1px solid #ddd;border-left:0}
+.alizi-page .box .box-content table.links td:nth-child(2){border-left:1px solid #ddd;border-right:0}
+.alizi-page .box .box-content table.links td a{display:block}
+.alizi-page .box-image{padding-bottom:0 !important;}
+.alizi-page .alizi-order{border-bottom:none;}
+.alizi-remark{color:#ccc;padding-top:10px;}
+.alizi-footer{color:#fff;text-align:center;border-top:none;background:none;}
+.alizi-footer a{color:#fff;}
+.alizi-footer p{padding:0 0 20px 0;font-size:12px}
+
+.alizi-plug {height:54px;color:#fff;overflow:hidden;}
+.alizi-plug .price{float:left;height:54px;width:65%;background: #f61d4b;vertical-align:bottom;}
+.alizi-plug .price .symbol{float:left;vertical-align:bottom;padding-top:28px;}
+.alizi-plug .current-price{float:left;font-size:45px;line-height:54px;vertical-align:bottom;letter-spacing:-3px;}
+.alizi-plug .group{float:left;margin-left:5px;}
+.alizi-plug .original-price{padding-top:5px;line-height:20px;vertical-align:top;display:block;}
+.alizi-plug .salenum{line-height:20px;vertical-align:bottom;height: 25px;line-height: 25px;padding: 2px;background: #ca032e;border-radius: 1px;}
+.alizi-plug .timer{float:left;height:54px;width:35%;background: -webkit-gradient(linear,0 0,0 100%,from(#fef391),to(#fbe253));color:#555;text-align:center;line-height:20px;font-weight:bold;}
+.alizi-plug .timer .tt{padding-top:5px;color:#f00;}
+
+.alizi-content-title{padding:15px;border-bottom:1px solid #eee;}
+.baoyou{ height:45px;line-height:25px; border-bottom:1px #eee solid;overflow:hidden; padding:10px 0 10px 10px;}
+.baoyou span{padding-left:18px; float:left; margin-right:10px; display:inline; font-size:10px;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAYCAMAAADTXB33AAAAaVBMVEUAAAD6IV76IV74Hl35HV3yG1f6IF/5IF71HVv6IF75H135IF75IF75IF76IF74H174H133HFv2HFz6IF76IF36H175IF76IV75IF34Hlz4Hl72IFv2IF36H1zMADO/AED5IF75IV/6IF8yblojAAAAInRSTlMA+upLKxLxzxiZe+bZtJRyaR4bxo9irY12RUQ4NzIFBKlWRq3aTAAAAN5JREFUKM9t0NuWgyAMBdDEGUHkpqi9dzo9//+RbQWK1ubBhW4M4VCu0FkjhLG+p3U1ihFL1mv5EQCGvT+o/w/pAHbNcmubF4C+rpowDvEcAR0+pPqdVwp8/S6B4baSZ2i+C1kMz+dfvRUy2D/FynojJOCJ7jGGIrdbJmpfVsRDzA1HimZKtxEmjZGsnDPAxuFDtCIB6F45MVT84KPEgOa7OvCFVnVhuHe8/VJ6DZECOjL0uchZg4/5ZWKw6tMvisFT2XiqAEjXtk4CqE7L9vXISMVjSrrgtJNVJXfTGx5lKhHS+63qqQAAAABJRU5ErkJggg==) no-repeat left center;background-size:16px 15px;-webkit-background-size: 16px 15px;}
+.gou{margin: 5px;height: 45px;background: #c60a1e;border-radius: 3px;font-size: 18px;color: #fff;text-align: center;line-height: 45px;}
+.gou a{color:#fff;font-size:18px;text-decoration:none;}
+.aliziDay strong:after{font-size:15px;content:' / '}
+.comment-title{display:none;}
+
+@media(max-width:600px){
+	.alizi-page .box{margin:5px 0px;}
+}	
+.alizi-detail-content h2{border-color:#eee !important;height: 50px;}

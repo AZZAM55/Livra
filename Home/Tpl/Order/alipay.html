@@ -1,0 +1,9 @@
+<extend name="Order:alizi" />
+<block name="body">
+
+<notempty name="aliziConfig.mail_send">
+<script type="text/javascript">
+seajs.use(['jquery'],function($){ var order_id = "{$order['id']}";$.ajax({ url:"{:U('Api/send')}",timeout:100,data:{order_id:order_id} });});
+</script>
+</notempty>
+</block>

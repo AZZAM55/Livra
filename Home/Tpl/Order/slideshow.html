@@ -1,0 +1,20 @@
+<notempty name="info.slideshow">
+<div class="box-image">
+	<if condition="strpos($info['slideshow'],',') gt 0">
+		<div class="newbanner">
+		  <div class="newflexslider">
+			<ul class="newslides">
+				<volist name=":explode(',',$info['slideshow'])" id="vo">
+				<li><img src="{$vo|imageUrl}" /></li>
+				</volist>
+			</ul>
+		  </div>
+		</div>
+		<script type="text/javascript">
+		seajs.use(['jquery/newflexslider'], function(){ $('.newflexslider').newflexslider({ directionNav: true, pauseOnAction: false,newslideshowSpeed:4000 });});
+		</script>
+	<else />
+		<img src="{$info['slideshow']|imageUrl}" />
+	</if>
+</div>
+</notempty>

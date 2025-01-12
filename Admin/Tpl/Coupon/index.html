@@ -1,0 +1,69 @@
+{:W("Main",array('module'=>MODULE_NAME,'action'=>ACTION_NAME,'do'=>$_GET['do']))}
+
+<div class="layout-main">    
+    <div id="breadclumb" class="box">
+        <h3><strong>{:lang('breadclumb_colon')}</strong>{:lang(MODULE_NAME)}<span></span>{:lang('coupon_manage')}</h3>
+    </div>
+    <div id="CooperationMain" class="box clear-fix">   
+		<div class="layout-block-header">
+            <form action="__SELF__" method="get" id="searchform" style="float:right;">
+            	<input type="hidden" name="s" value="{$Think.const.MODULE_NAME}" />
+				<input type="hidden" name="a" value="{$Think.const.ACTION_NAME}" />
+				
+				<select name="is_used">
+					<php>$fields=array('0'=>'未使用','1'=>'已使用');</php>
+					<option value="">选择状态</option>
+					<volist name="fields" id="vo">
+					<option value="{$key}" <if condition="is_numeric($_GET['is_used']) && $_GET['is_used'] eq $key">selected='selected'</if>>{$vo}</option>
+					</volist>
+				</select>
+                <input type="text" name="keyword" value="{$_GET['keyword']|trim}" class="ui-text" autocomplete="off" size="30">
+                <button type="submit" class="btn btn-ok">{:lang('search')}</button>
+				<button type="submit" class="btn" name="aliziExcel">{:lang('export')}</button>
+            </form>
+			<h2><button type="buttun" class="btn btn-ok" onclick="javascript:shipping(0)">批量创建</button></h2>
+        </div>
+        
+		<div class="tabs-block">
+			<div class="ui-table">
+				<div class="ui-table-body ui-table-body-hover">
+					<table cellpadding="0" cellspacing="0" width="100%" >
+						<thead>
+							<tr class="ui-table-head">
+								<th class="ui-table-hcell">名称</th>
+								<th class="ui-table-hcell">券号</th>
+								<th class="ui-table-hcell">面值</th>
+								<th class="ui-table-hcell">使用状态</th>
+							</tr>
+						</thead>
+						<tbody>
+							<volist name="list" id="vo">
+							<tr id="row-{$vo.id}">
+								<td>{$vo.name}</td>
+								<td>{$vo.code}</td>
+								<td>{$vo.value}</td>
+								<td><empty name="vo.is_used"><span style="color:#f00"> 未使用</span><else />已使用</empty></td>
+							</tr>
+							</volist>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>	
+		<div class="ui-pager-bar clearfix" style="padding-left:10px;">
+			<div class="ui-pager" style="float:right">{$page}</div>
+		</div>
+	</div><!--.box-->
+<script type="text/javascript">
+
+function delConfirm(){
+	$.confirm('是否要删除？',function(){ 
+		$('#deleteForm').submit();
+	},true)
+}
+function shipping(id){
+	var url = "?m=Coupon&a=edit&page=1&id="+id;
+	$.open(url,{title:'批量创建',width:600,height:250});
+}
+</script>
+{:W("Foot")}   

@@ -1,0 +1,58 @@
+<html class="hairlines">
+<head>
+<meta charset="utf-8">
+<title>商品列表</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="__PUBLIC__/Alizi/zui/css/zui.min.css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Alizi/user/style.css">
+<style>
+	.profile{border:none;}
+	.items .item-content>.media.pull-left{max-width:80px;}
+	.item-brief a{color:#666;}
+</style>
+</head>
+<body>
+
+
+<!--#28b0e4-->
+<div class="register">
+	<div class="regTop">
+		<a href="index.php?m=User&a=index" class="back">返回</a>
+		<h2 class="alizi-title">商品推广</h2>
+	</div>
+	
+	  <div class="content">
+		<div class="profile" style="margin:0;padding:10px;border-radius:0;">
+		
+			
+			<div class="items">
+				<volist name="list" id="vo">
+				<div class="item">
+				  
+				  <div class="item-content">
+					<notempty name="vo.image">
+					<div class="media pull-left"><a href="{:C('ALIZI_ROOT')}index.php?m=User&a=item&id={$vo.id}"><img src="{$vo.image|imageUrl}" alt=""></a></div>
+					</notempty>
+					<div class="text">
+						<div class="item-heading">
+							<div class="pull-right label label-badge label-warning">{$vo.pv|intval}</div>
+							<h4><a href="{:C('ALIZI_ROOT')}index.php?m=User&a=item&id={$vo.id}">{$vo.name}</a></h4>
+						</div>
+						<div class="item-brief"><a href="{:C('ALIZI_ROOT')}index.php?m=User&a=item&id={$vo.id}">{$vo.brief}</a></div>
+					</div>
+				  </div>
+				</div>
+				</volist>		
+			</div>
+
+			
+		</div>
+	</div>
+		
+</div>
+
+</body>
+</html>

@@ -1,0 +1,100 @@
+<html class="hairlines">
+<head>
+<meta charset="utf-8">
+<title>我的活码</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="__PUBLIC__/Alizi/zui/css/zui.min.css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Alizi/user/style.css">
+<style>
+	.input-control{margin:10px 0;}
+</style>
+</head>
+<body>
+
+
+<!--#28b0e4-->
+<div class="register">
+	<div class="regTop">
+		<a href="index.php?m=User&a=qrcode" class="back">返回</a>
+		<h2 class="alizi-title">创建活码</h2>
+	</div>
+	
+	  <div class="content">
+	  
+		
+		<div class="profile" style="margin:0;padding:10px;border-radius:0;">
+			<form method="post" action="{:C('ALIZI_ROOT')}index.php?m=User&a=qrcode_add">
+				<div class="input-control has-label-left">
+				  <input id="name" name="name" type="text" class="form-control">
+				  <label for="name" class="input-control-label-left">活码名称:</label>
+				</div>
+				
+				<div id="uploader" class="uploader input-control">
+				  <button type="button" class="btn btn-primary uploader-btn-browse"><i class="icon icon-cloud-upload"></i> 上传二维码</button>
+				  <div id="tableUploader" class="uploader" style="margin-top:10px;">
+					  <div class="uploader-message text-center">
+						<div class="content"></div>
+						<button type="button" class="close">×</button>
+					  </div>
+					  <table class="table table-bordered">
+						<thead>
+						  <tr>
+							<th>二维码</th>
+							<th style="width:60px">操作</th>
+						  </tr>
+						</thead>
+						<tbody class="uploader-files">
+						  <tr class="file template">
+							<td>
+								<div class="file-icon" style="width:50px;height:50px;"></div>
+								<div class="file-progress-bar"></div>
+							</td>
+							<td class="actions text-right">
+							  <button type="button" data-toggle="tooltip" title="Remove" class="btn btn-link btn-delete-file"><i class="icon icon-trash text-danger"></i></button>
+							</td>
+						  </tr>
+						</tbody>
+					  </table>
+					</div>
+				</div>
+				
+				<div class="input-control">
+					<input type="hidden" name="sid" value="{$sid}">
+					<button class="btn btn-block btn-danger btn-lg" type="submit">确认保存</button>
+				</div>
+			</form>
+		</div>
+	</div>
+		
+</div>
+<link rel="stylesheet" href="__PUBLIC__/Alizi/zui/lib/uploader/zui.uploader.min.css">
+<script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="__PUBLIC__/Alizi/zui/js/zui.min.js"></script>
+<script src="__PUBLIC__/Alizi/zui/lib/uploader/zui.uploader.min.js"></script>
+<script>
+$(function(){
+	var sid = '{$sid}';
+	$('#uploader').uploader({
+		autoUpload: true,
+		mime_types: [
+			{title: '图片', extensions: 'jpg,gif,png,jpeg'},
+		],
+		multipart_params:{sid:sid},
+		deleteActionOnDone: function(file, doRemoveFile) {
+		  console.log(file);
+		  qrcodeRemove(file.id);
+		  doRemoveFile();
+		},
+		previewImageSize:{width:100,height:100},
+		url: "{:C('ALIZI_ROOT')}index.php?m=User&a=upload"  // 文件上传提交地址
+	});
+})
+function qrcodeRemove(id){
+	$.get("{:C('ALIZI_ROOT')}index.php?m=User&a=delete&uuid="+id);
+}
+</script>
+</body>
+</html>

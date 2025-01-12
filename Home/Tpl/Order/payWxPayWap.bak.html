@@ -1,0 +1,88 @@
+<html>
+<head>
+<title>微信支付-{$aliziConfig.title}</title>
+<meta charset="utf-8" />
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="yes" name="apple-touch-fullscreen"/>
+<meta content="telephone=no" name="format-detection"/>
+<link rel="dns-prefetch" href="http://{$_SERVER['SERVER_NAME']}">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0, user-scalable=no" name="viewport">
+<meta name="author" content="{:lang('author')}">
+<link rel="shortcut icon" href="__PUBLIC__/Assets/img/alizi.ico" />
+<link href="__PUBLIC__/Alizi/alizi-order.css?v={$Think.const.ALIZI_VERSION}" rel="stylesheet">
+<!--[if lt IE 9]><link href="__PUBLIC__/Alizi/alizi-ie.css?v={$Think.const.ALIZI_VERSION}" rel="stylesheet"><![endif]-->
+<script type="text/javascript" src="__PUBLIC__/Alizi/seajs/seajs/sea.js?v={$Think.const.ALIZI_VERSION}"></script>
+<script type="text/javascript">
+var aliziHost = "{$aliziHost}",aliziRoot = "{:C('ALIZI_ROOT')}",aliziVersion="{:C('ALIZI_VERSION')}",lang="{:C('DEFAULT_LANG')}";
+seajs.config({ base: '__PUBLIC__/Alizi/seajs/',alias: {'jquery': 'jquery/jquery','alizi': 'alizi/alizi','lang': 'alizi/lang-'+lang}, map: [['.css', '.css?v=' + aliziVersion]]});
+</script>
+</head>
+<body>
+<script type="text/javascript"> 
+var num = 0;
+if (typeof document.hidden !== "undefined") {  
+  hidden = "hidden";  
+  visibilityChange = "visibilitychange";  
+  state = "visibilityState";  
+} else if (typeof document.mozHidden !== "undefined") {  
+  hidden = "mozHidden";  
+  visibilityChange = "mozvisibilitychange";  
+  state = "mozVisibilityState";  
+} else if (typeof document.msHidden !== "undefined") {  
+  hidden = "msHidden";  
+  visibilityChange = "msvisibilitychange";  
+  state = "msVisibilityState";  
+} else if (typeof document.webkitHidden !== "undefined") {  
+  hidden = "webkitHidden";  
+  visibilityChange = "webkitvisibilitychange";  
+  state = "webkitVisibilityState";  
+}  
+document.addEventListener(visibilityChange, function(e) { 
+	if(num>=1){
+		var order_no = "{$order['order_no']}"
+		var redirect = "{:U('Order/result',array('order_no'=>'__orderNo__'))}";
+		window.location.href = redirect.replace('__orderNo__',order_no);
+	}
+	num++;
+}, false);
+
+seajs.use(['jquery','alizi'],function($){
+	var url = "{$pay.mweb_url}";
+	var order_id = "{$order['id']}",order_no = "{$order['order_no']}";
+	$.ajax({ url:"{:C('ALIZI_ROOT')}index.php?m=Api&a=send&order_id="+order_id,timeout:500 });
+
+	setTimeout(function(){ window.location.href=url; },10);
+	setTimeout(function(){ 
+		layer.confirm('是否支付成功？', {
+		  btn: ['支付成功','支付失败']
+		}, function(){
+			var redirect = "{:U('Order/result',array('order_no'=>'__orderNo__'))}";
+			window.location.href = redirect.replace('__orderNo__',order_no);
+		}, function(){
+		  window.location.href=url;
+		});
+		var redirect = "{:U('Order/result',array('order_no'=>'__orderNo__'))}";
+	},1200);
+	 
+});
+function setCookie(name,value)
+{
+	var Days = 30;
+	var exp = new Date();
+	exp.setTime(exp.getTime() + Days*24*60*60*1000);
+	document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+}
+function getCookie(name)
+{
+	var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+	if(arr=document.cookie.match(reg))
+	return unescape(arr[2]);
+	else
+	return 0;
+}
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+<extend name="Order/alizi" />
+<block name="body">
+<notempty name="aliziConfig.lazyload">
+<script type="text/javascript">
+seajs.use(['jquery/lazyload'], function() {
+	$(".alizi-detail-content img").lazyload({ placeholder : "__PUBLIC__/Alizi/alizi.gif",effect : "fadeIn",threshold:500});
+});
+</script>
+</notempty>
+<notempty name="info.timer">
+<script type="text/javascript"> seajs.use(['alizi'],function(alizi) {  alizi.timer('#alizi-timer', '{$info.timer}'); })</script>
+<else />
+<script type="text/javascript">seajs.use(['jquery'],function($) {  $('#alizi-timer').html(''); })</script>
+</notempty>
+<div class="alizi-detail-wrap clearfix">
+	<div class="alizi-detail-content">
+		<include file="Order/slideshow" />
+		<div class="box alizibox-1">
+		{$info.content}
+		{:W('Relate',array_merge($info,array('moduel'=>'Order')))} 
+		</div>
+	</div>
+	
+	<include file="Order/footbar" />
+</div>
+</block>

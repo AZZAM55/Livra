@@ -1,0 +1,146 @@
+<include file="Item:header" />
+<style>
+#category-list li{width:50%;margin-top:10px;padding:5px 0;margin-left:-1px;border-left:1px solid #F8F8F8;float: left;background:#fff;}
+#category-list li .image,#category-list li .description{width:95%;margin:5px auto;}
+#category-list li .description{height:5em;}
+.list-title{height:3em;line-height:1.5em;white-space: normal;}
+.list-buy,.list-brief{display:none;}
+.list-price{font-size:20px;color:#f60;}
+#category-list li.category-message{width:100%;text-align:center;padding:10px 0;}
+.active{color:#f60}
+.swiper-button{background-size: 10px !important;top: 45% !important; opacity: .5 !important;}
+.swiper-button-disabled{display:none;}
+.swiper-button-prev{left:0 !important;}
+.swiper-button-next{right:0 !important;}
+</style>
+
+<div class="newmain flex">
+	<div class="subnav" id="nav">
+		<div class="swiper-container">
+			<div class="swiper-wrapper">
+				<a id="menu-0" class="swiper-slide active" data-id="0" data-history="" onclick="categoryList('0')" data-href="{:U('Item/category')}" <empty name="_GET.id">class="active"</empty>>{:lang('all_category')}</a>
+				<volist name="category" id="vo">
+				<a id="menu-{$vo.id}" class="swiper-slide" data-id="{$vo.id}" data-history="" onclick="categoryList('{$vo.id}')" data-href="{:U('Item/category',array('id'=>$vo['id']))}" <eq name="vo.id" value="$_GET['id']">class="active"</eq>>{$vo.name}</a>
+				</volist>
+			</div>
+			<div class="swiper-button swiper-button-prev swiper-button-black"></div>
+			<div class="swiper-button swiper-button-next swiper-button-black"></div>
+		</div>
+	</div>
+	 
+	<link href="__PUBLIC__/Alizi/swiper/swiper.min.css" rel="stylesheet">
+	<script src="__PUBLIC__/Alizi/swiper/swiper.min.js"></script>
+	<script>
+	  var swiper = new Swiper('.swiper-container', {
+		slidesPerView: 4,
+		history: false,
+		navigation: {
+		  nextEl: '.swiper-button-next',
+		  prevEl: '.swiper-button-prev'
+		}
+	  });
+	  seajs.use(['jquery'], function(){ 
+			var elm = $('#nav');
+			var startPos = $(elm).offset().top;
+			$.event.add(window, "scroll", function() {
+				var p = $(window).scrollTop();
+				if(((p) > startPos)){ elm.addClass('alizi-fixed'); }else{ elm.removeClass('alizi-fixed'); }
+			});
+		});
+	</script>
+	 
+	
+	
+	<ul id="category-list">
+		<volist name="list" id="vo">
+		<li>
+			<div class="image"><a href="{:U('Item/order',array('id'=>$vo['id']))}" title="{$vo.name}"><img data-original="{$vo.image|imageUrl}"></a></div>
+			<div class="description">
+				<p class="list-title">{$vo.name}</p>
+				<notempty name="vo.brief"><p class="list-brief">{$vo.brief}</p></notempty>
+				<p class="list-price">{$vo.price|getPrice}</p>
+				<p class="list-buy"><a href="{:U('Item/order',array('id'=>$vo['sn']))}" class="btn">{:lang('view_detail')}</a></p>
+			</div>
+		</li>
+		</volist>
+	</ul>
+</div>
+<!--div class="container clearfix">
+	<div class="side-menu">
+		<div class="menu">
+			<a data-id="0" href="{:U('Item/category')}" <empty name="_GET.id">class="active"</empty>>{:lang('all_category')}</a>
+			<volist name="category" id="vo">
+			<a data-id="{$vo.id}" href="{:U('Item/category',array('id'=>$vo['id']))}" <eq name="vo.id" value="$_GET['id']">class="active"</eq>>{$vo.name}</a>
+			</volist>
+		</div>
+	</div>
+	<div class="main-content">
+		<ul id="category-list">
+			<volist name="list" id="vo">
+			<li>
+				<div class="image"><a href="{:U('Item/order',array('id'=>$vo['id']))}" title="{$vo.name}"><img data-original="{$vo.image|imageUrl}"></a></div>
+				<div class="description">
+					<p class="list-title">{$vo.name}</p>
+					<notempty name="vo.brief"><p class="list-brief">{$vo.brief}</p></notempty>
+					<p class="list-price">{:lang('symbol')}{$vo.price}</p>
+					<p class="list-buy"><a href="{:U('Item/order',array('id'=>$vo['sn']))}" class="btn">{:lang('view_detail')}</a></p>
+				</div>
+			</li>
+			</volist>
+		</ul>
+	</div>
+</div-->
+
+<script type="text/javascript">
+seajs.use(['jquery'], function($){ 
+	window.onresize = function(){height();}
+	function height(){
+		var imgBox = $('.image');
+		var width = imgBox.width();
+		console.log(width);
+		imgBox.height(width);
+		imgBox.find('img').height(width);
+	}
+	
+	categoryList("{$_GET['id']}","{$_GET['kw']}");
+	$('.menu a').click(function(e){
+		var _this=$(this),id = $(this).attr('data-id'),className='active';
+		_this.addClass(className).siblings().removeClass(className);
+		categoryList(id);
+		e.preventDefault();
+	})
+	
+
+	
+});
+function categoryList(id,kw){
+	$('#menu-'+id).addClass('active').siblings('a').removeClass('active');
+	$.ajax({
+		type:'get',
+		url:'{:U("Item/getCategoryList")}',
+		data:{id:id,kw:kw},
+		dataType:'json',
+		beforeSend:function(){
+			$('#category-list').html('<li class="category-message"><img src="__PUBLIC__/Alizi/loading.gif" /> {:lang("loading")}</li>');
+		},
+		success:function(data){
+			var list = '';
+			if(data.status==1){
+				var width = parseInt(parseFloat($('.newmain').width())/2*0.95);
+				
+				for(var i=0;i<data.data.length;i++){
+					var li = data.data[i],brief='',img=li.thumb?li.thumb:li.image;
+					var price = "{$vo.price|getPrice}";
+					img = img?img:'__PUBLIC__/Alizi/alizi.gif';
+					if(li.brief) brief='<p class="list-brief ellipsis">'+li.brief+'</p>';
+					list += '<li><div class="image"><a href="'+li.url+'" title="'+li.name+'"><img src="'+img+'" style="height:'+width+'px"></a></div><div class="description"><p class="list-price"><strong class="alizi-price">'+li.price_full+'</strong></p><p class="list-title ellipsis">'+li.name+'</p>'+brief+'<p class="list-buy"><a href="'+li.url+'" class="btn">{:lang("view_detail")}</a></p></div></li>';
+				}
+			}else{
+				list = '<li class="category-message">{:lang("empty")}</li>';
+			}
+			$('#category-list').html(list);
+		}
+	})
+}
+</script>
+<include file="Item:footer" />

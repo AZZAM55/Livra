@@ -1,0 +1,96 @@
+
+<if condition="$aliziConfig['show_qrcode'] eq 1 && isMobile() eq false">	
+<div id="qrcode"><div class="qrcode"><div id="alizi-qrcode"></div><span>{:lang('qrcodeAddress')}</span></div></div>
+<script type="text/javascript" src="__PUBLIC__/Assets/js/qrcode.min.js"></script>	
+<script type="text/javascript">new QRCode(document.getElementById('alizi-qrcode'), {text:window.location.href,width:200,height:200});</script>
+</if>
+
+<script type="text/javascript">
+seajs.use(['alizi','jquery/form','lang'],function(alizi){
+	 			
+	window.alizi = alizi;
+	alizi.quantity(0);
+	var btnSubmit = $('.alizi-submit');
+	$('#aliziForm').ajaxForm({
+		cache: true,
+		timeout: 50000,
+		dataType: 'json',
+		error:function(){ layer.closeAll(); alert(lang.ajaxError); btnSubmit.attr('disabled',false).val(lang.submit); },
+		beforeSubmit:function(){
+			if(checkForm('#aliziForm')==false) return false; 
+			layer.closeAll();layer.load();
+			btnSubmit.attr('disabled',true).val(lang.loading);
+		},
+		success:function(data){
+			layer.closeAll();layer.closeAll();
+			if(data.status=='1'){
+				//var redirect = "{$aliziConfig.payment_url}{:U('Order/pay',array('order_no'=>'__orderNo__'))}";
+				var redirect = "{$aliziConfig.payment_url}{:C('ALIZI_ROOT')}index.php?m=Order&a=pay&item_id={$info.id}&order_no="+data.data.order_no;
+				var jumpUrl  = redirect.replace('__orderNo__',data.data.order_no);
+				<if condition="!empty($info['javascript']) || session('fbpid')">
+					{$info.javascript};
+					<if condition="session('fbpid')">
+					fbq('track', 'Purchase', {value: data.data.total_price,currency: '{$aliziConfig.currency}'});
+					</if>
+					setTimeout(function(){ window.location.href = jumpUrl;},1000 );  
+				<else />
+					window.location.href = jumpUrl;
+				</if>
+			}else{
+				btnSubmit.attr('disabled',false).val(lang.submit);
+				layer.msg(data.info);
+			}
+		}
+	});
+	setTimeout(function(){ $.get("{:C('ALIZI_ROOT')}index.php?m=Order&a=item_pv&item_id={$info['id']}"); },1000);
+});
+var wx = {$info.wx|json_encode}; 
+</script>
+
+
+<notempty name="aliziConfig.weixin_status">
+<php>$slideshow = explode(',',$info['slideshow']);$imgUrl=$slideshow[0];</php>
+<script>
+define("wxShare",["jquery","https://res.wx.qq.com/open/js/jweixin-1.0.0.js"],function(a){
+	var $=a("jquery"),wx=a('https://res.wx.qq.com/open/js/jweixin-1.0.0.js');
+	var url = encodeURIComponent(location.href.split('#')[0]);
+    $.ajax({
+        type : "get",
+        url : "{:C('ALIZI_ROOT')}index.php?m=Order&a=wx&url="+url,
+        dataType : "json",
+        async : false,
+        success:function(share){
+            wx.config({
+                debug: false,
+                appId: share.appId,
+                timestamp: share.timestamp,
+                nonceStr: share.nonceStr,
+                url: share.url,
+                signature: share.signature,
+				//jsApiList:['onMenuShareAppMessage', 'onMenuShareTimeline', 'hideAllNonBaseMenuItem', 'showMenuItems','hideMenuItems']
+                jsApiList: [ 'onMenuShareTimeline', 'onMenuShareAppMessage']
+            });
+        },
+		complete: function(e){
+			console.log('complete');
+		},
+        error:function(data){  alert(data); }
+    });
+	wx.ready(function () {
+		var shareData = {
+			title: '{$info.name}',
+			desc: '{$info.brief}',
+			link: '{$thisUrl|urldecode}',
+			imgUrl: '{$imgUrl|imageUrl}',
+			success: function () {
+				alert('分享成功！');
+			}
+		};
+		wx.hideAllNonBaseMenuItem();
+		wx.onMenuShareAppMessage(shareData);
+		wx.onMenuShareTimeline(shareData);
+	});
+});
+seajs.use("wxShare");
+</script>
+</notempty>

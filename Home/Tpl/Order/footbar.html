@@ -1,0 +1,22 @@
+
+<div class='alizi-remark'>{$info['remark']}</div>
+<div class="alizi-footer">{$aliziConfig.footer}</div>
+<php>
+	$showNav = count(array_filter($template['extend']['bottom_nav_list']));
+	if($showNav>0){
+		if($showNav==1){ $style = "style='width:100%'";}elseif($showNav==2){ $style = "style='width:49%'";}else{ $style = '';}
+		$hidden = (strpos($template['extend']['bottom_nav_list'][1],'http')===0)?"style='display:none;'":"";
+		$aliziOrder = "javascript:scrollto('body');";
+		$html = '<div class="alizi-foot-nav"><a class="alizi-up" href="'.$aliziOrder.'" '.$hidden.'>'.lang('top').'</a><ul>';
+		for($i=1;$i<=$showNav;$i++){
+			$nav = explode('||',$template['extend']['bottom_nav_list'][$i]);
+			$class = isset($nav[2])?'icon '.$nav[2]:'';
+
+			$text = $hidden = (strpos($nav[0],'http')===0)?'<img src="'.$nav[0].'" style="max-width:100%;">':'<span class="am-icon-'.$nav[2].'"></span><strong class="'.$class.'">'.$nav[0].'</strong>';
+			$html .= '<li class="foot-nav-'.$i.'" '.$style.'><a href="'.$nav[1].'">'.$text.'</a></li>';
+		}
+		echo $html.'</ul></div>';
+	}
+</php>
+
+<include file="footjs" />

@@ -1,0 +1,137 @@
+<extend name="Order:alizi" />
+<block name="css">
+<style>.aliziAlert{display:none;}</style>
+</block>
+<block name="body">
+<php>
+$deposit = false;
+if(floatval($order['deposit'])>0 && !empty($order['deposit_payment'])){
+$deposit = true;
+}
+</php>
+<div class="result">
+	<h1><empty name="order.status"><img src="__PUBLIC__/Alizi/success.png"> {:lang('submit_success')}<else />{:lang('order_info')}</empty></h1>
+    <div class="innner order_div success">
+        <div class="order" style="min-height: calc(100vh - 244px);">
+			<eq name="order.status" value="3">
+				<php>$item = M('Item')->where('is_delete=0 and id='.$order['item_id'])->field('is_auto_send,send_content')->find();</php>
+				<notempty name="item.is_auto_send">
+				<div class="alizi-alert">
+					<span>{$item.send_content|nl2br}</span>
+				</div>
+				</notempty>
+			</eq>
+					
+            <ul>
+				<neq name="order.payment" value="1">
+				<notempty name="order.status">
+				<li><label>{:lang('order_status_colon')}</label><span><php>$status=C('ORDER_STATUS');</php>{$status[$order['status']]}</span></li>
+				</notempty>
+				</neq>
+				<li><label>{:lang('order_number_colon')}</label><span>{$order.order_no}</span></li>
+				<li><label>{:lang('item_name_colon')}</label><span>{$order.item_name}</span></li>
+				<notempty name="order.item_params">
+				<php>$params_name = getFields("Item","params_name",$order['item_id']);</php>
+				<li>
+					<label><empty name="params_name">{:lang('itemPackage_colon')}<else />{$params_name}{:lang('colon')}</empty></label>
+					<php>
+						$item_params = explode('#',$order['item_params']);
+						$show_params =  array();
+						foreach($item_params as $params){
+							$param = explode('||',$params);
+							$show_params[] = $param[0];
+						}
+					</php>
+					<span>{:implode('#',$show_params)}</span>
+				</li>
+				</notempty>
+				<php>$extends = json_decode($order['item_extends'],true);</php>
+				<notempty name="extends">
+					<volist name="extends" id="vo">
+					<li>
+						<label>{$key}{:lang('colon')}</label>
+						<php>
+						if(is_array($vo)){
+							$ret = array();
+							foreach($vo as $v){
+								$rs = explode('||',$v);
+								$ret[] = $rs[0];
+							}
+							$ret = implode('#',$ret);
+						}else{
+							$ret = $vo;
+						}
+						</php>
+						<span>{$ret}</span>
+					</li>
+					</volist>
+				</notempty>
+				<notempty name="options">
+				<php>
+					$opt=C('TEMPLATE_OPTIONS');$payment = C('PAYMENT');	
+					$file = explode(' ',$order['file']);
+				</php>
+				<volist name="options" id="name">
+					<php>if(in_array($name,array('verify','code','coupon','product','extends'))){continue;}</php>
+					<li>
+						<label><php>echo $opt[$name]['name'];</php>{:lang('colon')}</label>
+						<span>
+							<switch name="name">
+								<case value="price"><b>{$order['total_price']}</b></case>
+								<case value="payment"><php>echo $payment[$order[$name]]['name'];</php></case>
+								<case value="file">
+									<img src="{$order.file|imageUrl}" style="max-height:100px" />
+								</case>
+								<case value="file">
+									<img src="{$file[0]|imageUrl}" style="max-height:100px" />
+								</case>
+								<case value="file2">
+									<img src="{$file[1]|imageUrl}" style="max-height:100px" />
+								</case>
+								<default />{$order[$name]}
+							</switch>
+						</span>
+					</li>
+					</volist>
+					<if condition="!empty($deposit) && $order['payment'] eq 'payOnDelivery'">
+					<li>
+						<label>{:lang('deposit_colon')}</label>
+						<span>{$order.deposit}</span>
+					</li>
+					<li>
+						<label>{:lang('pay_status_colon')}</label>
+						<span><empty name="order.deposit_ispay"><i style='color:#f00'>未支付</i><else /><i style='color:#06c'>已支付</i></empty></span>
+					</li>
+					</if>
+				<else />
+					<!--li>{:lang('paymentSubmit')}</li-->	
+				</notempty>
+			</ul>
+			<div class="result_info">{$aliziConfig.result_info}</div>
+        </div>
+		
+        <div class="foot" style="padding:10px;">
+            <if condition="$deposit EQ true && empty($order['deposit_ispay'])  && $order['payment'] eq 'payOnDelivery'"><a href="{:U('Order/pay',array('order_no'=>$order['order_no'],'deposit'=>1,'payment'=>$order['deposit_payment']))}" class="foot_btn" style="border-radius:6px;">{:lang('pay')}</a></if>
+            <a href="{$redirectUrl}" class="foot_btn" style="background-color:#AAA;border-radius:6px;">{:lang('goback')}</a>
+			<p>{$aliziConfig.footer}</p>
+        </div>
+    </div>
+</div>
+<script>
+pushHistory();  
+window.addEventListener("popstate", function(e) {  
+	window.location.href = "{$redirectUrl}";
+	pushHistory();  
+}, false);  
+function pushHistory() {  
+	var state = { title: "title", url: "#" };  
+	window.history.pushState(state, "title", "#");  
+}
+</script>
+<notempty name="aliziConfig.mail_send">
+<script type="text/javascript">
+seajs.use(['jquery'],function($){ var order_id = "{$order['id']}";$.ajax({ url:"{:C('ALIZI_ROOT')}index.php?m=Api&a=send&order_id="+order_id,timeout:1000 });});
+</script>
+</notempty>
+
+</block>

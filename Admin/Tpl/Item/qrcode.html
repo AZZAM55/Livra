@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<link href="__PUBLIC__/Assets/css/esui.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Assets/css/union.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__PUBLIC__/Assets/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Assets/js/jquery.form.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Assets/js/jscolor.min.js"></script>
+<style>
+.info-table th, .info-table td{padding:3px 5px;}
+</style>
+</head>
+<body>
+<div class="layout-main">    
+    <div class="box clear-fix">
+		<form method="post" action="{:U('Item/qrcode')}" id="ajaxform" enctype="multipart/form-data">
+		<input type="hidden" name="id" value="{$info.id}" />
+		<input type="hidden" name="user_id" value="{$_SESSION.user.id}" />
+		<table class="info-table">
+			<tbody>
+				
+				<tr>
+					<td style="width:200px">
+						<h2 style="padding-bottom:10px;text-align:center">二维码推广</h2>
+						<div style="display:inline-block;padding:2px;border:5px solid #000;" id="qrcode">
+							<!--img id="qrcode" width="180" src="{:C('ALIZI_ROOT')}Api/qrcode.php?size=8&margin=0&data={$url}"-->
+						</div>
+					</td>
+					<td>
+						<style>
+						.alizi-text p{margin:3px 0;}
+						.alizi-text label{float:left;display:inline-block;width:70px;}
+						.alizi-text .ui-text{height:35px;}
+						</style>
+						<div class="alizi-text" style="text-align:left">
+						<p>
+							<label>选择链接：</label>
+							<select name="link" id="link" class="ui-text">
+								<option value="1">动态链接</option>
+								<option value="2">静态链接</option>
+							</select>
+						
+							<label style="float:none;margin-left:110px;">推广渠道：</label>
+							<input name="channel_id" id="channel_id"  class="ui-text">
+						</p>
+						<p>
+							<label>推广链接：</label>
+							<input name="url" id="url" readonly class="ui-text" size="60" type="text" value="{$url|urldecode}"><a id="url-link" href="{$url[1]|urldecode}" target="_blank">【预览】</a>
+						</p>
+						<!--p>
+							<label>form调用：</label>
+							<textarea name="using" id="using" class="input-textarea" cols="80" rows="6"  style="width:455px;background:#f4f4f4">{$form}</textarea>
+							<a href="{$host}index.php?m=Lite&id={$info.sn}&uid={$_SESSION['user']['id']}" target="_blank">【预览】</a>
+						</p-->
+						<p>
+							<label>iframe调用</label>
+							<textarea name="using" id="using" class="input-textarea" cols="80" rows="5"  style="width:455px;background:#f4f4f4"><iframe id="aliziIframe" name="aliziIframe" src="{$host}index.php?m=Order&id={$info.sn}&uid={$_SESSION['user']['id']}" width="100%" height="100%" scrolling="no" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0"></iframe></textarea>
+							<a href="{$host}index.php?m=Order&id={$info.sn}&uid={$_SESSION['user']['id']}" target="_blank">【预览】</a>
+						</p>
+		
+						
+						</div>
+					</td>
+				</tr>
+		
+			</tbody>
+		</table>
+		</form>
+    </div><!--.box-->
+<script type="text/javascript" src="__PUBLIC__/Assets/js/qrcode.min.js"></script>	
+<script type="text/javascript">
+$(function(){
+    $('#ajaxform').ajaxForm({
+        success:function(data){ 
+			parent.$.alert('保存成功',1);
+		},
+        dataType: 'json'
+    });
+});
+
+function addUser(){
+	top.location.href="{:U('User/add')}";
+}
+$(function(){
+	build();
+    $('#link').on('change',function(){ build(); })
+	$('#channel_id').on('keyup',function(){ build(); })
+});
+
+function build(argv){
+	var link = $('#link').val();
+	var acid = $('#channel_id').val();
+	
+	if(link==1){
+		var url = "{$url[1]|urldecode}";
+		if(acid){ url += "&gzid="+acid; }	
+	}else{
+		var url = "{$url[2]|urldecode}";
+		if(acid){ url += "?gzid="+acid; }	
+		$.get("{$url[1]|urldecode}&buildHtml=H5");
+	}
+	
+	//$('#qrcode').attr('src',"{:C('ALIZI_ROOT')}Api/qrcode.php?size=6&margin=0&data="+encodeURIComponent(url));
+	$('#qrcode').html('');
+	new QRCode(document.getElementById('qrcode'), {text:url,width:200,height:200});
+
+	$('#url').val(url);
+	$('#url-link').attr('href',url);
+	
+		
+}
+
+</script>   
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+<html>
+<head>
+<title>微信支付-{$order.item_name}</title>
+<meta charset="utf-8" />
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="yes" name="apple-touch-fullscreen"/>
+<meta content="telephone=no" name="format-detection"/>
+<link rel="dns-prefetch" href="http://{$_SERVER['SERVER_NAME']}">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0, user-scalable=no" name="viewport">
+<meta name="author" content="{:lang('author')}">
+<link rel="shortcut icon" href="__PUBLIC__/Assets/img/alizi.ico" />
+<link href="__PUBLIC__/Alizi/alizi-order.css?v={$Think.const.ALIZI_VERSION}" rel="stylesheet">
+<!--[if lt IE 9]><link href="__PUBLIC__/Alizi/alizi-ie.css?v={$Think.const.ALIZI_VERSION}" rel="stylesheet"><![endif]-->
+<script type="text/javascript" src="__PUBLIC__/Alizi/seajs/seajs/sea.js?v={$Think.const.ALIZI_VERSION}"></script>
+<script type="text/javascript">
+var aliziHost = "{$aliziHost}",aliziRoot = "{:C('ALIZI_ROOT')}",aliziVersion="{:C('ALIZI_VERSION')}",lang="{:C('DEFAULT_LANG')}";
+seajs.config({ base: '__PUBLIC__/Alizi/seajs/',alias: {'jquery': 'jquery/jquery','alizi': 'alizi/alizi','lang': 'alizi/lang-'+lang}, map: [['.css', '.css?v=' + aliziVersion]]});
+</script>
+<script type="text/javascript">
+	function onBridgeReady(){
+	   WeixinJSBridge.invoke(
+		   'getBrandWCPayRequest', {$wxPayRequest},
+		   function(res){   
+			   if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+					window.location.href = "{:U('Order/result',array('order_no'=>$order['order_no']))}";
+			   }else{
+					//alert(res.err_msg);return false;
+					window.location.href = "{:U('Order/result',array('order_no'=>$order['order_no']))}";
+			   }
+		   }
+	   ); 
+	}
+	if (typeof WeixinJSBridge == "undefined"){
+	   if( document.addEventListener ){
+		   document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+	   }else if (document.attachEvent){
+		   document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+		   document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+	   }
+	}else{ 
+		onBridgeReady();
+	}
+</script>
+</head>
+<body>
+<div class="result">
+	<h1>{:lang('order_submit_success')}</h1>
+    <div class="innner">
+        <div class="order" style="min-height: calc(100vh - 244px);">
+			<ul>
+				<li><label>{:lang('order_status_colon')}</label><span><php>$status=C('ORDER_STATUS');</php>{$status[$order['status']]}</span></li>
+				<li><label>{:lang('order_number_colon')}</label><span>{$order.order_no}</span></li>
+				<li><label>{:lang('item_name_colon')}</label><span>{$order.item_name}</span></li>
+				<li><label>{:lang('order_quantity_colon')}</label><span>{$order.quantity}</span></li>
+				<li><label>{:lang('order_price_colon')}</label><span>{$order.total_price}{:lang('yuan')}</span></li>
+			</ul>
+        </div>
+        <div class="foot">
+			<a href="javascript:;" onclick="pay()" class="foot_btn">立即支付</a>
+            <a href="{$order.url}" class="foot_btn" style="background-color:#888;">{:lang('goback')}</a>
+			<p>{$aliziConfig.footer}</p>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+var u = navigator.userAgent;
+var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+  
+ispay = 0;
+seajs.use(['jquery'],function($){
+	var order_id = "{$order['id']}";
+	$.ajax({ url:"{:U('Api/send')}",timeout:1000,data:{order_id:order_id} });
+	if(isiOS==false){
+		query();
+	}else{
+		setInterval(query,500);
+	}
+});
+function query(){
+	var url = "{:C('ALIZI_ROOT')}index.php";
+	var order_no = "{$order.order_no}";
+	$.ajax({
+		url:url+"?m=Order&a=orderQuery",
+		type:'get',
+		data:{order_no:order_no},
+		dataType:'json',
+		success:function(data){
+			if(data.status=='0' && ispay==0 && isiOS==false){
+				ispay = 1;
+				pay();
+			}else if(isiOS==true && getCookie(order_no)!='1'){
+              	setCookie(order_no,'1');
+            	pay();
+            }else if(data.status!='0'){
+				window.location.href=url+"?m=Order&a=result&order_no={$order.order_no}";
+			}
+			console.log(data);
+		}
+	})
+}
+function pay(){ 
+	var payurl =  "{$pay.mweb_url}";
+	window.location.href =payurl;
+}
+function setCookie(name,value)
+{
+	var Days = 1;
+	var exp = new Date();
+	exp.setTime(exp.getTime() + Days*24*60*60*1000);
+	document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+}
+function getCookie(name)
+{
+	var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+	if(arr=document.cookie.match(reg))
+	return unescape(arr[2]);
+	else
+	return 0;
+}
+</script>
+</body>
+</html>

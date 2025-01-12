@@ -1,0 +1,64 @@
+{:W("Main",array('module'=>MODULE_NAME,'action'=>ACTION_NAME,'do'=>$_GET['do']))}
+
+<div class="layout-main">    
+    <div id="breadclumb" class="box">
+        <h3><strong>{:lang('breadclumb_colon')}</strong>{:lang(MODULE_NAME)}<span></span>操作日志</h3>
+    </div>
+    <div id="CooperationMain" class="box clear-fix">   
+        <div class="layout-block-header">
+            <form action="__SELF__" method="get" id="searchform">
+				<input type="hidden" name="s" value="{$Think.const.MODULE_NAME}" />
+				<input type="hidden" name="a" value="{$Think.const.ACTION_NAME}" />
+                <label>{:lang('search_colon')}</label>
+                <input type="text" name="keyword" value="{$_GET['keyword']|trim}" class="ui-text" autocomplete="off" size="40">
+                <button type="submit" class="btn btn-ok">{:lang('search')}</button>
+				<button type="submit" class="btn" name="aliziExcel">{:lang('export')}</button>
+            </form>
+        </div>
+        
+		<form action="{:U('User/deleteLogs')}" method="post" id="deleteform">
+        <div class="ui-table">
+            <div class="ui-table-body ui-table-body-hover">
+                <table cellpadding="0" cellspacing="0" width="100%" >
+                    <thead>
+                        <tr class="ui-table-head">
+                            <th class="ui-table-hcell" width="50">ID</th>
+                            <th class="ui-table-hcell">{:lang('username')}</th>
+                            <th class="ui-table-hcell">操作内容</th>
+                            <th class="ui-table-hcell">IP</th>
+                            <th class="ui-table-hcell">{:lang('time')}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <volist name="list" id="vo">
+                        <tr id="row-{$vo.id}">
+                            <td>{$vo.id}</td>
+                            <td>{$vo.username}</td>
+                            <td>{$vo.content}</td>
+                            <td>{$vo.add_ip}</td>
+                            <td>{$vo.add_time}</td>
+                        </tr>
+                        </volist>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+          
+        <div class="ui-pager-bar clearfix" style="padding-left:10px;">
+			<div class="float-left">
+				<input type="button" name="delete" value="删除一个月前的记录" onclick=" return delConfirm()" class="button" style="padding:5px 10px;border-radius:4px;">
+			</div>
+			<div class="ui-pager" style="float:right">{$page}</div>
+		</div>
+		
+		</form>
+	</div><!--.box-->
+<script type="text/javascript">
+
+function delConfirm(){
+	$.confirm('是否要删除？',function(){ 
+		$('#deleteform').submit();
+	},true)
+}
+</script>
+{:W("Foot")}   

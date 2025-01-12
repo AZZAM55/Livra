@@ -1,0 +1,56 @@
+<html class="hairlines">
+<head>
+<meta charset="utf-8">
+<title>修改密码</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="__PUBLIC__/Alizi/zui/css/zui.min.css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Alizi/user/style.css">
+
+<script src="https://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+<script>
+function changePassword(){
+	var new_password = $("#new_password"),re_password = $("#re_password");
+	if(new_password.val() == ""){
+		new_password.focus();
+		alert("新密码不能为空");
+		return false;
+	}
+	if(re_password.val() != new_password.val()){
+		re_password.focus();
+		alert("两次输入的密码不一致");
+		return false;
+	}
+}
+</script>
+</head>
+<body>
+
+<div class="register">
+	<div class="regTop">
+		<a href="index.php?m=User&a=index" class="back">返回</a>
+		<h2 class="alizi-title">修改密码</h2>
+	</div>
+	
+	<div class="content">
+		<div class="profile">
+			<form method="post" action="{:C('ALIZI_ROOT')}index.php?m=User&a=changePassword" onsubmit="return changePassword()">
+			  <div class="form-group">
+				<label for="exampleInputPassword1">新密码</label>
+				<input type="password" name="new_password" id="new_password" class="form-control" >
+			  </div>
+			  <div class="form-group">
+				<label for="exampleInputPassword1">确认密码</label>
+				<input type="password" name="re_password" id="re_password" class="form-control" >
+			  </div>
+			  <button type="submit" class="btn btn-primary">确认修改</button>
+			</form>
+		</div>
+	</div>
+		
+</div>
+
+</body>
+</html>

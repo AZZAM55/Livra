@@ -1,0 +1,43 @@
+/*
+ * 标题：时时订单系统
+ * 作者：47478439（QQ号）
+ * 官方网址：www.wxrob.com
+ * 官方店铺：https://www.wxrob.com/
+ * 警示信息：您可以复制使用本站静态文件（html/css/js/images），但请保留原创作者（47478439（QQ号））信息，谢谢。
+ */
+
+select, .alizi-input-text{padding:0.3rem;width: 97%;}
+.alizi-title{display:none;}
+.alizi-box-params{position:relative;}
+.alizi-order .rows-head{position:absolute;left:10px;width:5rem;font-weight:normal;border-bottom:none;padding:2px 0;text-align:right;}
+.alizi-order .rows-params{padding-left:5.5rem;line-height:2rem;}
+
+.alizi-side .alizi-title{background-position:-10px -55px;}
+.alizi-side{margin-left:-1px;border-left:1px solid #0C0;}
+.alizi-side.alizi-full-row{border-top:4px solid #0C0;}
+
+.alizi-payment label{background-position: left 2px;padding-left:32px;}
+.alizi-payment label{background-position: left 2px;padding-left:32px;}
+.alizi-payment .payment-alipay{background-position:4px -42px;}
+.alizi-payment .payment-wxpay{background-position:2px -90px;}
+.alizi-payment a.active,.alizi-payment label.active,.alizi-payment a:hover,.alizi-payment label:hover{background-position:-200px 2px;}
+.alizi-payment .payment-alipay.active,.alizi-payment .payment-alipay:hover{background-position:-200px -42px;;}
+.alizi-payment .payment-wxpay.active,.alizi-payment .payment-wxpay:hover{background-position:-200px -90px;}
+ 
+.rows-id-params .rows-params a{padding:2px 15px;border-radius:5px;}
+.rows-id-params .rows-head,.rows-id-extends .rows-head{float:none;position:relative;}
+.rows-id-params .rows-params,.rows-id-extends .rows-params{margin-left:0;padding-left:0;}
+.rows-id-extends .alizi-group{margin-right:5px;padding:2px 15px;border:1px solid #ccc;border-radius:5px;cursor:pointer;background:#fff;transition: all 0.3s linear 0s;}
+.rows-id-extends .alizi-group-box{display:none;}
+
+.alizi-order{border:none;}
+.alizi-order-wrap{padding: 5px;background:#f5f5f5;}
+.alizi-box{margin:0 5px 10px 5px;padding:10px;border-radius: 5px;box-shadow: 0 1px 2px 2px #E4E4E4;background: #fafafa;}
+.alizi-side{border:none !important;margin;0;}
+.alizi-delivery{margin:10px 0;padding:10px 5px;}
+
+.alizi-params.active{background-color:#f60 !important;}
+
+.alizi-box-notice{float:right;width: 30%;padding-top:10px;padding-bottom:01px;}
+.alizi-box-notice .alizi-side{width:100%;}
+.alizi-full-row.alizi-box{float:none;width:100%;margin: 0; padding: 0;}

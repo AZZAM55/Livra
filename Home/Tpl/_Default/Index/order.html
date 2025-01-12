@@ -1,0 +1,67 @@
+<extend name="/Order:alizi" />
+<block name="css">
+<link href="{:C('ALIZI_ROOT')}Public/Alizi/pc/alizi.css?v={$Think.const.ALIZI_VERSION}" rel="stylesheet">
+<notempty name="aliziConfig.lazyload">
+<script type="text/javascript">
+seajs.use(['jquery/lazyload'], function() {
+	$(".alizi-detail-content img").lazyload({ placeholder : "{:C('ALIZI_ROOT')}Public/Alizi/alizi.gif",effect : "fadeIn",threshold:500});
+});
+</script>
+</notempty>
+<notempty name="info.timer">
+<script type="text/javascript">seajs.use(['alizi','jquery/form','lang'],function(alizi) { alizi.timer('#alizi-timer', '{$info.timer}'); })</script>
+</notempty>
+</block>
+<block name="body">
+<include file="Index:header" />
+
+<div class="mainwidth" id="alizi-show-bar">
+	<div class="alizi-detail-header clearfix">
+		 
+		
+		<div class="mainwidth header-wrap"> 
+			<a class="booking-now" href="javascript:scrollto('#aliziOrder');">{:lang('bookingNow')}</a>
+			<notempty name="info.image"><h1 class="title"><img src="{$info.image|imageUrl}"></h1></notempty>
+			<dl>
+				<dt class="ellipsis">{$info.name}
+					<notempty name="info.tags"><volist name=":explode('#',$info['tags'])" id="vo"><span class="alizi-badge">{$vo}</span></volist></notempty>
+				</dt>
+				<dd class="ellipsis">{$info.brief}</dd>
+			</dl>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="mainwidth">
+
+		
+
+    <script type="text/javascript">
+		seajs.use(['jquery'], function() {
+			$(window).scroll(function(){
+				var winHeight = $(this).height(),orderTop = $('.alizi-order').offset().top,docTop = $(document).scrollTop(),nav=$('.alizi-foot-nav'),navHeight=nav.height();
+				if(docTop+winHeight/2>=orderTop){ nav.slideUp(); }else{ nav.slideDown(); }
+			})
+			var elm = $('#alizi-show-bar'); 
+			var startPos = $(elm).offset().top; 
+			$.event.add(window, "scroll", function() { 
+				var p = $(window).scrollTop(); 
+				if(((p) > startPos)){ elm.addClass('alizi-fixed'); }else{ elm.removeClass('alizi-fixed'); }
+			}); 
+		});
+		</script>
+		<div class="alizi-detail-wrap clearfix">
+			<div class="alizi-detail-content">{$info.content}</div>
+			
+			{:W('Relate',array_merge($info,array('moduel'=>'Index')))}
+		</div>
+	</div>
+</div>
+<include file="/Order/footjs" />
+</block>
+
+<block name="foot">
+    <div class='alizi-remark'>{$info['remark']}</div>
+    <include file="Index:footer" />
+</block>

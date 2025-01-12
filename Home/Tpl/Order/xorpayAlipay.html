@@ -1,0 +1,52 @@
+<extend name="Order:alizi" />
+<block name="body">
+<div class="result">
+	<h1>{:lang('order_submit_success')}</h1>
+    <div class="innner">
+        <div class="order" style="min-height: calc(100vh - 244px);">
+            <div class="succtop">
+				<span class="text">{:lang('order_number_colon')}{$order.order_no}</span>
+				<span style="margin-left:20px;">{:lang('order_price_colon_symbol')}<b class="price">{$order.total_price}</b></span>
+			</div>
+			<div class="succtop" style="padding:20px;">
+				<div class="qrcode"><img src="http://{$_SERVER['HTTP_HOST']}{:C('ALIZI_ROOT')}Api/qrcode.php?data={$result.info.qr}" /></div>
+				<if condition="isWeixin()">
+				<p class="text">点击右上角下拉菜单【在浏览器打开】</b></p>
+				<else />
+				<p class="text">使用<b>【支付宝扫一扫】</b>，进行支付</p>
+				</if>
+				<if condition="isMobile()"><a href="{$result.info.qr}" target="_blank" class="foot_btn" style="display:block;width:80%;margin:10px auto;border-radius:8px;">唤起支付宝进行支付</a></if>
+			</div>
+        </div>
+        <div class="foot" style="padding:10px;">
+			<a href="{$redirectUrl}" class="foot_btn" style="background-color:#AAA;">{:lang('goback')}</a>
+			<p>{$aliziConfig.footer}</p>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+flag = false;
+var url = "{:C('ALIZI_ROOT')}index.php";
+seajs.use(['jquery'],function(jquery){
+	var order_id = "{$order['id']}";
+	$.ajax({ url:url+"?m=Api&a=send",timeout:100,data:{order_id:order_id} });
+	if(flag==false){ setInterval(query,1500); }
+});
+function query(){
+	var order_no = "{$order.order_no}";
+	$.ajax({
+		url:url+"?m=Order&a=orderQuery",
+		type:'get',
+		data:{order_no:order_no},
+		dataType:'json',
+		success:function(data){
+			if(data.status=='1' || data.status=='3'){
+				flag = true;
+				window.location.href=url+"?m=Order&a=result&order_no={$order.order_no}";
+			}
+			console.log(data);
+		}
+	})
+}
+</script>
+</block>

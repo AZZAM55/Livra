@@ -1,0 +1,45 @@
+<?php
+return array(
+	'SESSION_AUTO_START' =>true,
+	'ORDER_STATUS' => array(
+		0=>'<i class="statis-0">待支付</i>',
+		1=>'<i class="statis-1">已付款</i>',
+		2=>'<i class="statis-2">確認</i>',
+		3=>'<i class="statis-3">發貨</i>',
+		4=>'<i class="statis-4">簽收</i>',
+		5=>'<i class="statis-5">拒收</i>',
+		6=>'<i class="statis-6">關閉</i>',
+	), 
+	'PAYMENT' => array(
+		'payOnDelivery'=>array('name'=>'宅配到府','info'=>'','classname'=>'payment-cod','math'=>'+'),
+		'711'=>array('name'=>'711超商取貨','info'=>'','classname'=>'payment-711','math'=>'+'),
+		'quanjia'=>array('name'=>'全家取貨','info'=>'','classname'=>'payment-quanjia','math'=>'+'),
+		'alipay'=>array('name'=>'支付寶','info'=>'','classname'=>'payment-alipay','math'=>'*'),
+		'wxpay'=>array('name'=>'微信支付','info'=>'','classname'=>'payment-wxpay','math'=>'*'),
+		'qrcode'=>array('name'=>'二維碼支付','info'=>'','classname'=>'payment-qrcode','math'=>'*'),
+		'bankpay'=>array('name'=>'銀行匯款','info'=>'','classname'=>'payment-bankpay','math'=>'+'),
+	), 
+	'TEMPLATE_OPTIONS'=>array(
+		'product'=>array('name'=>'价格套餐','request'=>false, 'checked'=>true),
+		'price'=>array('name'=>'訂單價格','request'=>false, 'checked'=>true),
+		'extends'=>array('name'=>'产品属性','request'=>false, 'checked'=>true),
+		
+		'salenum'=>array('name'=>'已售數量','request'=>false,'checked'=>false),
+		'quantity'=>array('name'=>'訂購數量','request'=>true,'checked'=>true),
+		'name'=>array('name'=>'真實姓名','request'=>true,'info'=>'','checked'=>true),
+		'mobile'=>array('name'=>'手機號碼','request'=>true,'info'=>'','checked'=>true),
+		'phone'=>array('name'=>'聯絡電話','request'=>false,'info'=>'','checked'=>true),
+		'payment'=>array('name'=>'收貨方式','request'=>true, 'checked'=>true),
+		'region'=>array('name'=>'選擇地區','request'=>true,'checked'=>true),
+		'address'=>array('name'=>'詳細地址','request'=>true,'info'=>'','checked'=>true),
+		'datetime'=>array('name'=>'配送時間','request'=>true,'info'=>'', 'checked'=>true),
+		'zcode'=>array('name'=>'郵政編碼','request'=>false,'info'=>'','checked'=>false),
+		'weixin'=>array('name'=>'Line帳戶','request'=>false,'info'=>'','checked'=>false),
+		'qq'=>array('name'=>'QQ 號碼','request'=>true,'info'=>'','checked'=>false),
+		'mail'=>array('name'=>'電子郵箱','request'=>false,'info'=>'','checked'=>false),
+		'remark'=>array('name'=>'留言備註','request'=>false,'info'=>'','checked'=>true),
+		'verify'=>array('name'=>'驗 證 碼','request'=>true,'info'=>'','checked'=>true),
+		'code'=>array('name'=>'短信驗證','request'=>true,'info'=>'','checked'=>true),
+	),
+);
+?>

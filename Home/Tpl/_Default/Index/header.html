@@ -1,0 +1,63 @@
+
+<div class="header">
+	<div class="mainwidth">
+		<div class="headtop">
+			<span class="place cur_city_name">
+				<form action="{:U('Index/category')}" method="get" class="search_form">
+					<input type="text" name="kw" class="search_input" placeholder="{:lang('item_search')}" value="{$_GET['kw']}" />
+					<input type="submit" value="" class="search_button">
+					<input type="hidden" name="m" value="Index" class="search_button">
+					<input type="hidden" name="a" value="category" class="search_button">
+				</form>
+			</span>
+			
+			<div class="topright">
+				<php>/*
+				<empty name="_SESSION['user']['username']">
+				<a href="{:U('User/login')}" class="member">{:lang('login')}</a>
+				<else />
+				<a href="{:U('User/index')}" class="member">{$_SESSION['user']['username']}</a>
+				<a href="{:U('User/logout')}" class="logout">[{:lang('logout')}]</a>
+				</empty>
+				*/</php>
+				<a href="{:U($wap_theme.'/index')}" class="phone">{:lang('themeMobile')}</a>
+			</div>
+			
+		</div>
+		<div class="logobox">
+			<a href="{$aliziHost}" class="logo">
+				<img title="{$aliziConfig.title}" alt="{$aliziConfig.title}" src="<empty name='aliziConfig.logo_pc'>__PUBLIC__/Alizi/pc/logo.png<else />{$aliziConfig.logo_pc|imageUrl}</empty>">
+			</a>
+		</div>
+		<div class="nav">
+			<php>
+			$navArray = explode("<br />",nl2br($aliziConfig['header_nav']));
+			foreach($navArray as $li){ 
+				$navArr = explode('||',$li);
+				$navArr[1] = strpos($navArr[1],'index.php')===0?C('ALIZI_ROOT').$navArr[1]:$navArr[1];
+				$nav[] = $navArr;
+			}
+			</php>
+			<ul>
+				<li <eq name='ACTION_NAME' value='index'>class="active"</eq>><a href="{:U('Index/index')}"><span data-hover="{:lang('index')}">{:lang('index')}</span></a></li>
+				<if condition="isset($nav[0])">
+				<li class="li_2"><a href="{$nav[0][1]}"><span data-hover="{$nav[0][0]}">{$nav[0][0]}</span></a></li>
+				</if>
+				<if condition="isset($nav[1])">
+				<li class="li_3"><a href="{$nav[1][1]}"><span data-hover="{$nav[1][0]}">{$nav[1][0]}</span></a></li>
+				</if>
+				<if condition="isset($nav[2])">
+				<li class="li_4"><a href="{$nav[2][1]}"><span data-hover="{$nav[2][0]}">{$nav[2][0]}</span></a></li>
+				</if>
+			</ul>
+		</div>
+	</div>
+</div>
+<notempty name="aliziConfig.theme_color">
+<style> 
+	.booking-now,.alizi-btn,.alizi-plug .price,.alizi-badge{background-color: #<php>echo $aliziConfig['theme_color'];</php> !important;border-color: #<php>echo $aliziConfig['theme_color'];</php> !important;}
+	.alizi-btn.active {color:#<php>echo $aliziConfig['theme_color'];</php>;border-bottom-color:#<php>echo $aliziConfig['theme_color'];</php>;}
+	.side-menu a.active{border-left-color:#<php>echo $aliziConfig['theme_color'];</php>;}
+	.btn-buy,.alizi-foot-nav{background-color:#<php>echo $aliziConfig['theme_color'];</php> !important;}
+</style>
+</notempty>

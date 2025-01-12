@@ -1,0 +1,133 @@
+<extend name="/Order:alizi" />
+<block name="css">
+<link href="__PUBLIC__/Alizi/pc/alizi.css?v={$Think.const.ALIZI_VERSION}" rel="stylesheet">
+<script type="text/javascript">
+seajs.use(['jquery/lazyload'], function() {
+	$(".alizi-lazy").lazyload({ placeholder : "__PUBLIC__/Alizi/alizi.gif",effect : "fadeIn"});
+});
+</script>
+</block>
+<block name="body">
+<div class="pbody">
+	<include file="Index:header" />
+
+
+<div class="container">
+	<div class="mainwidth">
+		
+		<notempty name="slider">
+		<div class="newbanner">
+		  <div class="newflexslider">
+			<ul class="newslides">
+				<volist name="slider" id="vo">
+				<li><a href="{$vo.link}" target="{$vo.target}"><img src="{$vo.banner|imageUrl}" /></a></li>
+				</volist>
+			</ul>
+		  </div>
+		</div>
+		<script type="text/javascript">
+		seajs.use(['jquery/newflexslider'], function(){ $('.newflexslider').newflexslider({ directionNav: true, pauseOnAction: false,newslideshowSpeed:5000 });});
+		</script>
+		</notempty>
+
+
+	<notempty name="hot.list">
+	<div class="indprocon">
+		<div class="toptitle">
+			<span class="titlein"><strong>{:lang('newArrival')} / <span class="en">New Products</span></strong></span>
+		</div>
+		
+		<ul class="indprolist">
+			<volist name="hot.list" id="vo">
+			<li>
+				<div class="img">
+				<a href="{:U('Index/order',array('id'=>$vo['sn']))}">
+					<img src="{$vo.image|imageUrl}" class="alizi-lazy"><span></span>
+				</a>
+				</div>
+				<a href="{:U('Index/order',array('id'=>$vo['sn']))}" class="title ellipsis" title="{$vo.name}">{$vo.name}</a>
+				<span class="price">
+					{$aliziConfig['symbol']?$aliziConfig['symbol']:lang('symbol')}{$vo.price}
+					<if condition="floatval($vo['original_price']) gt 0"><del>{$aliziConfig['symbol']?$aliziConfig['symbol']:lang('symbol')}{$vo.original_price}</del></if>
+				</span>
+				<span class="text">{$vo.brief}</span>
+			</li>
+			</volist>
+		</ul>
+	</div>
+	</notempty>
+
+<style> 
+.btn{background-color: #FF6600;}
+.tabs-nav a.active {color:#FF6600;border-bottom-color:#FF6600;}
+.side-menu a.active{border-left-color:#FF6600;}
+.btn-buy,.alizi-foot-nav{background-color:#FF6600 !important;}
+.booking-now,.alizi-btn,.alizi-plug .price,.alizi-badge{background-color: #FF6600 !important;border-color: #FF6600 !important;}
+.alizi-btn.active {color:#FF6600;border-bottom-color:#FF6600;}
+.newtitle{ height:auto; line-height:50px;font-size:140%; text-indent:12px; color:#444; border:1px solid #eee; border-bottom:none;background-color: #fff;text-align:center;}
+.newmain dl{ display:block; }
+.newmain dl dt{ margin-top:-1px;clear:both;width:100%; height:auto;position:relative;overflow:hidden;border-bottom: 1px solid #eee;border-top: 1px solid #eee;}
+.newmain dl dt a.info{ height:auto; display:block; position:relative; background:#fff; border-right:1px solid #eee;}
+.newmain dl dt .img{ display:block;height:auto;text-align:center;}
+.newmain dl dt .img img{ height:auto;max-width:100%;}
+.newmain dl dt .clear{margin-top:0px;}
+.newmain_text1,.newmain_text{margin-left:-1px;border-right:1px solid #eee;padding:8px 0;width:100%;  display:block; z-index:99;text-align:center;position: relative;background: #fff;}
+.newmain_text1 h4,.newmain_text1 p,.newmain_text1 em,.newmain_text h4,.newmain dl dd a p,.newmain dl dd a em{ display:block; height:3em;overflow:hidden; line-height:1.5em;}
+.newmain_text1 h4,.newmain_text h4{font-size:100%;color:#333333;}
+.newmain_text1 p,.newmain_text p{font-size:80%; color:#666;}
+.newmain_text1 em,.newmain_text em{font-size:100%; color:#666;}
+.newmain_text1 em strong,.newmain_text em strong {font-size:120%; font-weight:normal; color:#FF9933;}
+.newmain dl dt .newmain_text em {right: 3%;top: 20px;}
+.newmain dl dd{ width:50%; display:inline-block; height:auto;oat:left;background-color: #fff;*margin-left:-1px;position:relative;overflow:hidden;border-bottom: 1px solid #eee;border-left: 1px solid #eee;margin-left: -1px;}
+.newmain dl dd a.info{height:auto; display:block; overflow:hidden; position:absolute;left:0;right:0;top:0;bottom: 0;border-right: 1px solid #eee;}
+.newmain dl dd .img{display:block; height:auto;margin-top:0;text-align:center;position: relative;}
+.newmain dl dd .img img{ width:100%;bottom:0;}
+.newmain .data-empty{ width:100%;text-align:center;padding:5em 0;}
+.alizi-item-list .clear{margin-top:80%;}
+.tabs-nav a {display: inline-block;height:40px;font-size: 14px;color: #4b4b4b;background:#fff;text-align:center;overflow:hidden;border-bottom:1px solid #e3e3e3;}
+.tabs-nav a  span{display: inline-block;margin:10px 0;height:20px;line-height:20px;border-left:1px solid #ccc;width:100%;text-align:center;}
+.tabs-nav a:first-child  span{border:none;}
+.tabs-nav a.active{color:#1faf33;border-bottom:1px solid #1faf33;}
+.tabs-main{padding-top:10px;}
+.newmain dl.list3{display:none;}
+.newmain dl.list3 dd{width:230px !important;margin:8px;}
+.newmain dl.list3 .newmain_text{top:10px;text-align:center;padding-bottom: 20px;}
+.newmain dl.list3 .newmain_text em{font-size:1em;font-style:normal;}
+
+</style>
+
+	{:W('Tabs',array('status'=>$aliziConfig['item_category_show'],'id'=>$aliziConfig['item_category_id'],'num'=>$aliziConfig['item_category_num']))}
+	
+	<div class="indprocon">
+		<div class="toptitle">
+			<span class="titlein"><strong>{:lang('newsInfo')} / <span class="en">News Infomation</span></strong></span>
+		</div>
+		<php>
+			$category = M('Category')->where('type=2')->order('sort_order asc ,id asc')->limit(3)->select();
+			foreach($category as &$cate){
+				$cate['list'] = M('Article')->where('is_delete=0 and status=1 and category_id='.$cate['id'])->order('sort_order asc ,id desc')->limit(10)->select();
+			}
+		</php>
+		<div class="wrap clearfix">
+			<volist name="category" id="vo">
+			<div class="news-list">
+				<notempty name="vo.image"><div class="list-title"><a href="{:U('Index/article',array('id'=>$vo['id']))}"><img src="{$vo.image|imageUrl}" alt="{$vo.name}"></a></div></notempty>
+				<ul>
+					<volist name="vo.list" id="li">
+					<li><a href="{:U('Index/detail',array('id'=>$li['id']))}" target="_blank">{$li.name}</a></li>
+					</volist>
+				</ul>
+			</div>
+			</volist>
+		</div>
+	</div>
+	
+</div>
+    </div>
+<div id="downArrowBox"></div>
+</div>
+</block>
+
+<block name="foot">
+<include file="Index:footer" />
+</block>

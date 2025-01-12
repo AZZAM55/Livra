@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<link href="__PUBLIC__/Assets/css/esui.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Assets/css/union.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__PUBLIC__/Assets/js/jquery.min.js"></script>
+<style>
+.info-table th, .info-table td{padding:3px 5px;}
+</style>
+</head>
+<body>
+<div class="layout-main">    
+    <div class="box clear-fix">
+		<div class="layout-block-header">
+			<table>
+				<tbody>
+					<tr><td><h2>快递公司：{$com}</h2></td></tr>
+					<tr><td><h2>快递单号：{$num}</h2></td></tr>
+					<tr><td><h2>快递状态：<span style="color:#F00">{$traceState}</span></h2></td></tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="AccountInfo">
+			<table class="info-table">
+				<tbody>
+					<volist name="list.Traces" id="vo">
+					<tr>
+						<td style="width:130px">{$vo.AcceptTime}</td>
+						<td>{$vo.AcceptStation}</td>
+					</tr>
+					</volist>
+				</tbody>
+			</table>
+		</div>
+    </div><!--.box-->
+</body>
+</html>

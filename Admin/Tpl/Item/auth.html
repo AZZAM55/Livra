@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<link href="__PUBLIC__/Assets/css/esui.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Assets/css/union.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__PUBLIC__/Assets/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Assets/js/jquery.form.js"></script>
+</head>
+<body>
+<div class="layout-main">    
+    <div class="box clear-fix">
+		<form method="post" action="{:U('Item/auth')}" id="ajaxform" enctype="multipart/form-data">
+			<table class="info-table">
+				<tbody>
+					<tr>
+						<th>选择分组：</th>
+						<td class="extends">
+							<volist name="list" id="vo">
+							<label style="margin-right:30px;"><input type="checkbox" name="group_id[]" value="{$vo.id}" <if condition="in_array($vo['id'],$check)">checked</if>><span>{$vo.name}</span></label>
+							</volist>
+						</td>
+					</tr>
+					
+					<tr>
+						<th>&nbsp;</th>
+						<td class="extends">
+							<input type="hidden" name="item_id" value="{$_GET['id']}">
+							<input type="submit" class="btn btn-ok" value="{:lang('submit')}">
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			</form>
+    </div><!--.box-->
+<script type="text/javascript" src="__PUBLIC__/Assets/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+$(function(){
+    $('#ajaxform').ajaxForm({
+        success:function(data){ 
+			color = data.data;
+			parent.$.alert('操作成功',1,false);
+		},
+        dataType: 'json'
+    });
+});
+
+</script>   
+<link href="__PUBLIC__/Assets/js/umeditor/themes/default/css/umeditor.min.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/Assets/js/umeditor/umeditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/Assets/js/umeditor/umeditor.min.js"></script>
+<script type="text/javascript">  
+UM.getEditor('content',{autoHeightEnabled:true,initialFrameWidth:750,initialFrameHeight:80});
+UM.getEditor('reply_content',{autoHeightEnabled:true,initialFrameWidth:750,initialFrameHeight:80});
+</script>  
+</body>
+</html>

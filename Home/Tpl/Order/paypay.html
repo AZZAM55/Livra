@@ -1,0 +1,61 @@
+<html>
+<head><block name="head">
+<title><notempty name="info.name">{$info.name} - </notempty>{$aliziConfig.title}</title>
+<meta charset="utf-8" />
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="yes" name="apple-touch-fullscreen"/>
+<meta content="telephone=no" name="format-detection"/>
+<link rel="dns-prefetch" href="http://{$_SERVER['SERVER_NAME']}">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0, user-scalable=no" name="viewport">
+<meta name="description" content="<empty name='info.brief'>{$aliziConfig.description}<else />{$info.brief}</empty>">
+<meta name="keywords" content="<notempty name="info.tags">{:str_replace('#',' ',$info['tags'])}</notempty> {$aliziConfig.keywords}">
+<meta name="author" content="{:lang('author')}">
+<link rel="shortcut icon" href="__PUBLIC__/Assets/img/alizi.ico" />
+<link href="__PUBLIC__/Alizi/alizi-order.css?v={$Think.const.ALIZI_VERSION}" rel="stylesheet">
+<!--[if lt IE 9]><link href="__PUBLIC__/Alizi/alizi-ie.css?v={$Think.const.ALIZI_VERSION}" rel="stylesheet"><![endif]-->
+<script type="text/javascript" src="__PUBLIC__/Assets/js/jquery.min.js?v={$Think.const.ALIZI_VERSION}"></script>
+</head>
+<body>
+
+ 
+<div class="result">
+	<h1>{:lang('loading')}</h1>
+    <div class="innner">
+		<form id='pay_form' method='post' action='https://www.paypayzhu.com/api/pay'>
+			<div class="order" style="min-height: calc(100vh - 244px);">
+				<ul style="display:none;">
+					<li><label>{:lang('order_status_colon')}</label><span><php>$status=C('ORDER_STATUS');</php>{$status[$order['status']]}</span></li>
+					<li><label>{:lang('order_number_colon')}</label><span>{$order.order_no}</span></li>
+					<li><label>{:lang('item_name_colon')}</label><span>{$order.item_name}</span></li>
+					<li><label>{:lang('order_quantity_colon')}</label><span>{$order.quantity}</span></li>
+					<li><label>{:lang('order_price_colon')}</label><span>{$order.total_price}{:lang('yuan')}</span></li>
+				</ul>
+				
+				
+					<input id='api_user' name='api_user' type='hidden' value='{$pay.api_user}' />
+					<input id='price' name='price' type='hidden' value='{$pay.price}' />
+					<input id='type' name='type' type='hidden' value='{$pay.type}'/>
+					<input id='redirect' name='redirect' type='hidden' value='{$pay.redirect}'/>
+					<input id='order_id' name='order_id' type='hidden' value='{$pay.order_id}'/>
+					<input id='order_info' name='order_info' type='hidden' value='{$pay.order_info}'/>
+					<input id='signature' name='signature' type='hidden' value='{$pay.signature}'/>
+				
+			</div>
+			<div class="foot" style="display:none;">
+				<button type="submit" id='btn_pay' class="foot_btn">立即支付</button>
+				<a href="{$order.url}" class="foot_btn" style="background-color:#888;">{:lang('goback')}</a>
+				<p>{$aliziConfig.footer}</p>
+			</div>
+		</form>
+    </div>
+</div>
+<script type="text/javascript">
+$(function(){
+	setTimeout(function(){ $('#pay_form').submit();}, 500 )
+	var order_id = "{$order['id']}";
+	$.ajax({ url:"{:U('Api/send')}",timeout:1000,data:{order_id:order_id} });
+});
+</script>
+</body>
+</html>

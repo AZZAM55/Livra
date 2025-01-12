@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<php>
+		$payment = C('PAYMENT');
+		$name = $payment['codepay']['type'][$pay['type']];
+	</php>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Language" content="zh-cn">
+    <meta name="apple-mobile-web-app-capable" content="no"/>
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <meta name="format-detection" content="telephone=no,email=no"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="white">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>{$name}扫码支付</title>
+    <link href="__PUBLIC__/Alizi/codepay/css/wechat_pay.css" rel="stylesheet" media="screen">
+</head>
+
+<body>
+ 
+<div class="body">
+    <h1 class="mod-title">
+        <span class="ico_log ico-{$pay.type}"></span>
+    </h1>
+    <div class="mod-ct">
+        <div class="order">
+        </div>
+        <div class="amount" id="money">￥<span id="pay_money">{$pay.money}</span></div>
+        <div class="qrcode-img-wrapper" data-role="qrPayImgWrapper">
+            <div data-role="qrPayImg" class="qrcode-img-area">
+                <div class="ui-loading qrcode-loading" data-role="qrPayImgLoading" style="display: none;">加载中</div>
+                <div style="position: relative;display: inline-block;">
+                    <img id='show_qrcode' alt="加载中..." src="{$pay.qrcode}" width="210" height="210" style="display: block;">
+                    
+                </div>
+            </div>
+
+
+        </div>
+        <!-- 这里可以输入你想要的提示!-->
+     
+		 
+		<if condition="$pay['type'] eq 1 && isMobile() eq true">
+		<div class="tps_btn" style="padding-top: 10px;"><button class="btn" style="color: #fff;text-decoration: none; text-align: center;padding: 10px 0; display: inline-block; width: 88%; border-radius: .3rem; font-size: 14px;background-color: #428bca; border: 1px solid #428bca;letter-spacing:normal;font-weight: normal"  data-clipboard-text="快来领支付宝红包！人人可领！天天可领！复制此消息，打开最新版支付宝就能领取！iZMxSC07DL">启动支付宝APP支付{$pay.money}元</button></div>
+		</if>
+		
+        <div class="tip">
+            <div class="ico-scan"></div>
+            <div class="tip-text">
+                <p>请使用{$name}扫一扫</p>
+                <p>扫描二维码完成支付</p>
+            </div>
+        </div>
+
+        <div class="detail" id="orderDetail">
+            <dl class="detail-ct" id="desc" style="display: none;">
+
+                <dt>状态</dt>
+                <dd id="createTime">订单创建</dd>
+
+            </dl>
+            <a href="javascript:void(0)" class="arrow"><i class="ico-arrow"></i></a>
+        </div>
+
+        <div class="tip-text">
+        </div>
+
+
+    </div>
+    <div class="foot">
+        <div class="inner">
+            <p>手机用户可保存上方二维码到手机中</p>
+            <p>在{$name}扫一扫中选择“相册”即可</p>
+        </div>
+    </div>
+
+</div>
+ 
+
+<!--注意下面加载顺序 顺序错乱会影响业务-->
+<script src="__PUBLIC__/Alizi/codepay/js/jquery-1.10.2.min.js"></script>
+<!--[if lt IE 8]>
+<script src="https://codepay.fateqq.com:51888/js/json3.min.js"></script><![endif]-->
+<script>
+    var user_data ={$payJson}
+</script>
+<script src="__PUBLIC__/Alizi/codepay/js/notify.js"></script>
+<script src="__PUBLIC__/Alizi/codepay/js/codepay_util.js"></script>
+
+<script src="https://cdn.bootcss.com/clipboard.js/2.0.1/clipboard.min.js"></script>
+<script>
+new ClipboardJS('.btn');
+$('.btn').click(function(){ window.location.href = 'https://d.alipay.com';}); 
+
+</script>
+
+<script>
+/*
+	var timeOut = (user_data.endTime-user_data.serverTime)*1000+20000;
+	console.log(timeOut);
+    setTimeout(function () {
+        $('#use').hide() //2秒后隐藏中间那LOGO
+    }, user_data.logoShowTime || 2000);
+	setTimeout(function () {   $('#show_qrcode').hide();$('.qrcode-img-wrapper').html("<p style='text-align:center;padding:20px 0;'>二维码失效</p>");}, timeOut);
+*/
+</script>
+<script type="text/javascript">
+$(function(){
+	var order_id = "{$order['id']}";
+	$.ajax({ url:"{:C('ALIZI_ROOT')}index.php?m=Api&a=send&order_id="+order_id,timeout:1000 });
+	setInterval(query,2000);
+});
+function query(){
+	var url = "{:C('ALIZI_ROOT')}index.php?m=Order&a=orderQuery&order_no={$order['order_no']}";
+	$.ajax({
+		url:url,
+		type:'get',
+		dataType:'json',
+		success:function(data){
+			if(data.status=='1' || data.status=='3'){
+				window.location.href="{:C('ALIZI_ROOT')}index.php?m=Order&a=result&order_no={$order['order_no']}";
+			}
+			console.log(data);
+		}
+	})
+}
+</script>
+
+</body>
+</html>

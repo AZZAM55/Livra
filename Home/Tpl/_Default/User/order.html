@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>我的订单</title>
+	<meta name="format-detection" content="telephone=no, address=no">
+	<meta name="apple-mobile-web-app-capable" content="yes" /> 
+	<meta name="apple-touch-fullscreen" content="yes"/>
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<link rel="stylesheet" href="__PUBLIC__/Alizi/zui/css/zui.min.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/Alizi/user/style.css">
+	
+	<script src="https://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+	<script src="__PUBLIC__/Alizi/zui/js/zui.min.js"></script>
+	<style>
+	body{background:#FFFFFF;}
+	.container{padding:5px;max-width:100%;}
+	.label i{font-style:normal;}
+	.nav-tabs>li{margin-bottom:-2px;}
+	.pager{line-height:30px;}
+	.pager strong{margin:0 10px;}
+	.pager>a, .pager>span {
+		position: relative;
+		float: left;
+		padding: 5px 12px;
+		margin-left: -1px;
+		line-height: 1.53846154;
+		text-decoration: none;
+		background-color: #fff;
+		border: 1px solid #ddd;
+	}
+	</style>
+</head>
+<body>
+<div class="regTop">
+	<a href="index.php?m=User&a=index" class="back">返回</a>
+	<h2 class="alizi-title">订单管理</h2>
+</div>
+<div class="container container-fill">
+
+
+
+<php>$status = C('ORDER_STATUS');</php>
+<div style='margin-top:10px;'>
+	
+	<ul class="nav nav-tabs">
+		<li <if condition="!isset($_GET['ispay'])">class="active"</if>><a href="index.php?m=User&a=order">所有订单</a></li>
+		<li <eq name="_GET['ispay']" value="0">class="active"</eq>><a href="index.php?m=User&a=order&ispay=0">{$status[0]|strip_tags}</a> </li>
+		<li <eq name="_GET['ispay']" value="1">class="active"</eq>><a href="index.php?m=User&a=order&ispay=1">{$status[1]|strip_tags}</a> </li>
+		<!--
+		<li <if condition="intval($_GET['status']) GT 1">class="active"</if>>
+		  <a class="dropdown-toggle" data-toggle="dropdown" href="#">更多 <span class="caret"></span></a>
+		  <ul class="dropdown-menu">
+			<volist name="status" id="vo">
+				<php>if($key<2){continue;}</php>
+				<li><a href="index.php?m=User&a=order&status={$key}">{$vo|strip_tags}</a></li>
+			</volist>
+		  </ul>
+		</li>
+		-->
+	  </ul>
+	
+	<notempty name="list"> 	
+		<div class="items items-hover">
+			<volist name="list" id="vo">
+			  <div class="item">
+				<div class="item-heading">
+					<switch name="vo.status">
+						<case value="0"><div class="pull-right label">{$status[$vo['status']]}</div></case>
+						<case value="1"><div class="pull-right label label-danger">{$status[$vo['status']]}</div></case>
+						<default /><div class="pull-right label label-info">{$status[$vo['status']]}</div>
+					</switch>
+				  <h4><a href="javascript:;">{$vo.item_name}</a></h4>
+				</div>
+				<div class="item-content">
+					<div class="text"> 编号：{$vo.order_no}</div>
+					<notempty name="vo.item_params">
+					<div class="myoder-express">
+						<span class="express-company">套餐：</span>
+						<span class="express-num" style="width: 80%;text-align: left">{$vo.item_params}</span>
+					</div>
+					</notempty>
+					<if condition="in_array('detail',$_SESSION['member']['group']['auth']['Order'])">
+					<div class="text"> 总价：<strong style="color:#F00">{$vo.total_price}</strong></div>
+					<notempty name="vo.name"><div class="text"> 姓名：{$vo.name}</div></notempty>
+					<notempty name="vo.mobile"><div class="text"> 电话：{$vo.mobile}</div></notempty>
+					<if condition="!empty($vo['region']) ||!empty($vo['address'])"><div class="text"> 地址：{$vo.region} {$vo.address}</div></if>
+					<div class="text"> 时间：{$vo.add_time|date="Y-m-d H:i:s",###} </div>
+					<else />
+					<notempty name="vo.name"><div class="text"> 姓名：{$vo.name|mb_substr=0,1,'utf-8'}**</div></notempty>
+					</if>
+				</div>
+			  </div>
+			</volist>
+		</div>
+
+		<div class="pager">{$page}</div>
+	<else />
+		<div class="myoder img-rounded" style='text-align:center;color:#aaa;padding:30px;'>&nbsp;</div>
+	</notempty>
+</div>
+
+
+</body>
+</html>
+<script>
+	function cancelOrder(oid){
+		var r=confirm("确定要进行此操作吗？");
+		if (r==true){
+				$.ajax({
+					type : "POST",  
+					url : '/index.php/Salesman/Index/orderDelete/oid/'+oid,
+					success : function(result) {
+						if (result=="0") {
+							$("#order"+oid).remove();
+							alert("删除订单成功");
+						} else {
+							alert("操作失败，刷新页面重试！");
+						}
+					},error:function(XMLHttpRequest, textStatus, errorThrown){
+						dialog_alert_Mes('您当前网络不稳定，刷新页面再试一次。');
+					}
+				});
+			}
+	}
+</script>

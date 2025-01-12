@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<link href="__PUBLIC__/Assets/css/esui.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Assets/css/union.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__PUBLIC__/Assets/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Assets/js/jquery.form.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Assets/js/jscolor.min.js"></script>
+</head>
+<body>
+<div class="layout-main">    
+    <div class="box clear-fix">
+		<form method="post" action="{:U('Item/proccess')}" id="ajaxform" enctype="multipart/form-data">
+		<table class="info-table comments">
+			<tbody>
+				<tr>
+					<th width="60">{:lang('status_colon')}</th>
+					<td>
+						<select name="status">{$info.status|status="select"}</select>
+						<span class="ui-validityshower-info">（禁用则前台不显示）</span>
+					</td>
+					<th width="60">星级：</th>
+					<td>
+						<select name="start">
+							<for start="1" end="6" name="i" >
+							<option value="heart-{$i}" <eq name='info.start' value='heart-$i'>selected</eq>>{$i} 心</option>
+							</for>
+							<for start="1" end="6" name="i" >
+							<option value="diamond-{$i}" <eq name='info.start' value='diamond-$i'>selected</eq>>{$i} 钻</option>
+							</for>
+						</select>
+					</td>
+				</tr>
+                <tr>
+                    <th>姓名</th>
+                    <td>
+                        <input name="name" class="ui-text" size="20" id="name" type="text" value="{$info.name}" >
+                    </td>
+             
+                    <th>手机</th>
+                    <td>
+                        <input name="mobile" class="ui-text" size="20" id="mobile" type="text" value="{$info.mobile}" >
+                    </td>
+                </tr>
+				<tr>
+					<th>地区</th>
+					<td>
+						<input name="region" class="ui-text" size="20" id="region" type="text" value="{$info.region}" >
+					</td>
+				
+					<th>时间</th>
+					<td>
+						<input name="add_time"  class="ui-text Wdate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});" size="20" id="region" type="text" value="<empty name='info.add_time'>{:date('Y-m-d')}<else />{$info.add_time}</empty>" >
+					</td>
+				</tr>
+				<tr>
+					<th>标题</th>
+					<td colspan="3">
+						<input name="title" class="ui-text" size="80" id="title" type="text" value="{$info.title}" >
+					</td>
+				
+				</tr>
+				<tr>
+					<th>评论内容</th>
+					<td colspan="3">
+						<textarea name="content" id="content" class="input-textarea editor" cols="80" rows="2"  style="width:600px;">{$info.content}</textarea>
+					</td>
+				</tr>
+				<tr>
+					<th>回复内容</th>
+					<td colspan="3">
+						<textarea name="reply_content" id="reply_content" class="input-textarea editor" cols="80" rows="2"  style="width:600px;">{$info.reply_content}</textarea>
+					</td>
+				</tr>
+	
+				<tr>
+					<th>&nbsp;</th>
+					<td>
+						<input type="submit"class="btn btn-ok" value="确认提交" />
+					</td>
+				</tr>
+				<tr style="display:none;">
+					<th>&nbsp;</th>
+					<td>
+						<notempty name="_GET.comments_id"><input type="hidden" name="id" value="{$info.id}"></notempty>
+						<input type="hidden" name="item_id" value="{$_GET['item_id']}" />
+						<input type="hidden" name="module" value="Comments" />
+						<input type="hidden" name="user_id" value="{$_SESSION.user.id}" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		</form>
+    </div><!--.box-->
+<script type="text/javascript" src="__PUBLIC__/Assets/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+$(function(){
+    $('#ajaxform').ajaxForm({
+        success:function(data){ 
+			color = data.data;
+			parent.$.alert('操作成功',1,false);
+		},
+        dataType: 'json'
+    });
+});
+
+</script>   
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/Assets/js/ueditor-1.4.3/ueditor.config.js?v=1"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/Assets/js/ueditor-1.4.3/ueditor.all.js?v=1"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/Assets/js/ueditor-1.4.3/lang/zh-cn/zh-cn.js?v=1"></script>
+<script type="text/javascript">  
+ var ue = UE.getEditor('content');
+//UM.getEditor('reply_content',{autoHeightEnabled:true,initialFrameWidth:750,initialFrameHeight:80});
+</script>  
+</body>
+</html>

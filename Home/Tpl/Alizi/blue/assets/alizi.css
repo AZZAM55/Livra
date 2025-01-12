@@ -1,0 +1,36 @@
+/*
+ * 标题：时时订单系统
+ * 作者：47478439（QQ号）
+ * 官方网址：www.wxrob.com
+ * 官方店铺：https://www.wxrob.com/
+ * 警示信息：您可以复制使用本站静态文件（html/css/js/images），但请保留原创作者（47478439（QQ号））信息，谢谢。
+ */
+*{margin:0;padding:0;}
+body{margin:0;padding:0;background-image:url("bg.jpg");background-attachment:fixed;background-size:cover;background-position:center top;font:14px/1.5 "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei", serif;padding-top:50px;color:#333;}
+h1{font-size:20px}
+h2{font-size:16px}
+a{color:#EB5F3E;text-decoration:none}
+a:hover{text-decoration:underline}
+.wrapper{min-height:500px;background-color:rgba(247, 255, 253, 0.96);max-width:750px;margin:0 auto}
+.alizi-page{padding:20px;border-bottom:1px solid #ccc;}
+.alizi-page img{max-width:100%;}
+.alizi-page .title{padding-bottom:20px;}
+
+.alizi-order{background:none !important;}
+.alizi-title{display:none;}
+.alizi-theme-alizi .alizi-input-text{height:16px;line-height:16px;box-shadow:none;}
+.rows-head{margin-bottom:0;padding-bottom:0;}
+.rows-id-address {padding-top:0;}
+.alizi-params-image{width:25% !important;}
+.alizi-btn:hover{opacity:.8;}
+.rows-id-price  .rows-head, .rows-id-quantity  .rows-head, .rows-id-datetime  .rows-head, .rows-id-salenum  .rows-head{float:none;}
+#qrcode{background-color:#009AFF;}
+.alizi-footer{border-top:none;background:none;margin-bottom:40px;}
+#aliziComments .title{padding:10px 5px;}
+.alizi-detail-content h2{border-top:none !important;}
+.fav-list li{margin:10px !important;}
+
+@media(max-width:600px){
+	body{padding-top:8px;}
+	.alizi-page{padding:5px 0px;}
+}	

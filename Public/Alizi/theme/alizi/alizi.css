@@ -1,0 +1,16 @@
+/*
+ * 标题：时时订单系统
+ * 作者：47478439（QQ号）
+ * 官方网址：www.wxrob.com
+ * 官方店铺：https://www.wxrob.com/
+ * 警示信息：您可以复制使用本站静态文件（html/css/js/images），但请保留原创作者（47478439（QQ号））信息，谢谢。
+ */
+
+.alizi-payment label{background-position: left 2px;padding-left:32px;}
+.alizi-payment .payment-alipay{background-position:4px -42px;}
+.alizi-payment .payment-wxpay{background-position:2px -90px;}
+.alizi-payment a.active,.alizi-payment label.active,.alizi-payment a:hover,.alizi-payment label:hover{background-position:-200px 2px;}
+.alizi-payment .payment-alipay.active,.alizi-payment .payment-alipay:hover{background-position:-200px -42px;;}
+.alizi-payment .payment-wxpay.active,.alizi-payment .payment-wxpay:hover{background-position:-200px -90px;}
+.alizi-title{display:none;}
+#aliziForm{padding-left:8px;}

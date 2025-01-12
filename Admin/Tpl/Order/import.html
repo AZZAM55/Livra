@@ -1,0 +1,143 @@
+{:W("Main",array('module'=>MODULE_NAME,'action'=>ACTION_NAME,'do'=>$_GET['do']))}
+
+<div class="layout-main">    
+    <div id="breadclumb" class="box">
+        <h3><strong>{:lang('breadclumb_colon')}</strong>{:lang(MODULE_NAME)}<span></span>{:lang('bulk_action')}</h3>
+    </div>
+    <div class="box clear-fix">
+        <div class="layout-block-header"><h2>{:lang('bulk_action')}</span></h2></div>  
+        <div class="AccountInfo">
+            <div class="info-block">
+				<form method="post" action="{:U('Order/batchImport')}" id="ajaxform" enctype="multipart/form-data">
+                <table class="info-table">
+                    <tbody>
+                    	<tr>
+							<th width="200">{:lang('action_status_colon')}</th>
+                            <td>
+								<select name="status" id="order-status" onchange="changeStatus(this.value)">
+									<volist name="status" id="vo">
+										<option value="{$key}">{$vo|strip_tags}</option>
+									</volist>
+								</select>
+								<select name="delivery_name" id="delivery_name" style="display:none;">
+									<volist name="delivery" id="vo">
+										<option value="{$key}">{$vo|strip_tags}</option>
+									</volist>
+								</select>
+							</td>
+                        </tr>
+						<tr>
+                            <th>{:lang('import_excel_colon')}</th>
+                            <td class="extends">
+								<input type="file" name="excel">
+							</td>
+                        </tr>
+						<tr>
+                            <th>&nbsp;</th>
+                            <td class="extends">
+								<input type="submit" class="btn btn-ok" value="{:lang('submit')}">
+								<input type="hidden" class="btn btn-ok" name="upload" value="1">
+							</td>
+                        </tr>
+						<tr>
+							<th>说明信息：</th>
+                            <td>
+								导入Excel表格的第一行为标题共3列，分别为：<b style="color:#f00">订单编号、快递单号、操作备注</b>，点击<a href="Public/order.xls" style="font-weight:bold;" target="_blank">【下载模板】</a><br>
+								其中订单编号为必填，快递单号和操作备注选填，但是选择【发货】状态时需要填写快递单号
+
+							</td>
+                        </tr>
+                    </tbody>
+                </table>
+				</form>
+            </div>
+        </div>  
+    </div><!--.box-->
+	
+
+	
+<script type="text/javascript">
+$(function(){
+	num = 0;
+    $('#ajaxform').ajaxForm({
+        timeout: 15000,
+        error:function(){ $('#ajaxLoading').hide();alert("{:lang('ajaxError')}");},
+        beforeSubmit:function(){ 
+			if( $('#remark').val()==''){
+				$.alert('请输入备注内容',0);
+				return false;
+			}
+			if(!confirm('确认操作？')) return false;
+
+			$('#ajaxLoading').show().find('span').text("{:lang('loading')}");
+		},
+        success:function(data){
+            console.log(data);
+            if(data.status==1){
+				var status = $('#order-status').val(),delivery_name = $('#delivery_name').val();
+		        for(var i= 2;i<data.info+2;i++){
+                    (function(i) {
+                        setTimeout(function() {
+                            var json = data.data[i];
+                            $.ajax({
+                                url:"{:U('Order/import')}",
+                                type:"POST",
+                                data:{todo:'modify',status:status,delivery_name:delivery_name,order_no:json[0],delivery_no:json[1],remark:json[2]},
+                                dataType:"json",
+                                success:function(rs){
+									num++;
+                                    $('#ajaxLoading').show().find('span').text("已完成 "+num+"/"+data.info);
+                                    if(num>=data.info){
+                                        $('#ajaxLoading').hide();
+                                        $.alert("{:lang('success')}",1,false);
+                                    }
+                                }
+                            })
+                        },(i-1)*200);
+                    })(i)
+                }
+                /*
+				var num = 1,total=data.info+1;
+				timer = setInterval(function(){
+					if(num<=total){
+						num++;
+						json = data.data[num];
+						$.ajax({
+							url:"{:U('Order/import')}",
+							type:"POST",
+							data:{status:status,delivery_name:delivery_name,order_no:json[0],delivery_no:json[1],remark:json[2]},
+							dataType:"json",
+							success:function(rs){
+								$('#ajaxLoading').show().find('span').text("已完成 "+(num-1)+"/"+data.info);
+								if(num>=total){
+									console.log(num+'/'+total);
+									clearInterval(timer);
+									$('#ajaxLoading').hide();
+									$.alert("{:lang('success')}",1,false);
+								}
+							}
+						})
+					}else{
+						clearInterval(timer);
+						$('#ajaxLoading').hide();
+						$.alert("{:lang('success')}",1);
+					}
+				},2000);
+				*/
+            }else{
+                $.alert('Error',0);
+            }
+        },
+        dataType: 'json'
+    });
+});
+function changeStatus(id){
+	if(id=='3'){
+		$('#delivery_name').show()
+	}else{
+		$('#delivery_name').hide()
+	}
+}
+</script>     
+       
+{:W("Foot")}   

@@ -1,0 +1,32 @@
+/*
+ * 标题：时时订单系统
+ * 作者：47478439（QQ号）
+ * 官方网址：www.wxrob.com
+ * 官方店铺：https://www.wxrob.com/
+ * 警示信息：您可以复制使用本站静态文件（html/css/js/images），但请保留原创作者（47478439（QQ号））信息，谢谢。
+ */
+
+.alizi-payment label{background-position: left 2px;padding-left:32px;}
+.alizi-payment .alizi-payment-2{background-position:4px -42px;}
+.alizi-payment .alizi-payment-3,.alizi-payment .alizi-payment-9{background-position:2px -90px;}
+.alizi-payment .alizi-payment-5,.alizi-payment .alizi-payment-4{background-position:2px -142px;}
+.alizi-payment .alizi-payment-6{background-position:2px -190px;}
+.alizi-payment .alizi-payment-7{background-position:2px -242px;}
+.alizi-payment .alizi-payment-8{background-position:2px -292px;}
+.alizi-payment a.active,.alizi-payment label.active,.alizi-payment a:hover,.alizi-payment label:hover{background-position:-200px 2px;}
+.alizi-payment .alizi-payment-2.active,.alizi-payment .alizi-payment-2:hover{background-position:-200px -42px;;}
+.alizi-payment .alizi-payment-3.active,.alizi-payment .alizi-payment-3:hover,.alizi-payment .alizi-payment-9.active,.alizi-payment .alizi-payment-9:hover{background-position:-200px -90px;}
+.alizi-payment .alizi-payment-5.active,.alizi-payment .alizi-payment-5:hover,.alizi-payment .alizi-payment-4.active,.alizi-payment .alizi-payment-4:hover{background-position:-200px -142px;}
+.alizi-payment .alizi-payment-6.active,.alizi-payment .alizi-payment-6:hover{background-position:-200px -190px;}
+.alizi-payment .alizi-payment-7.active,.alizi-payment .alizi-payment-7:hover{background-position:-200px -242px;}
+.alizi-payment .alizi-payment-8.active,.alizi-payment .alizi-payment-8:hover{background-position:-200px -292px;}
+.alizi-title{display:none;}
+
+.rows-params{margin-left:5px;}
+.rows-head{margin:0;padding:0;}
+select{height:2.2rem;padding:.3rem 0}
+.alizi-input-text{padding:.3rem 0}
+.alizi-params{display:inline-block;float:none;padding:2px .4rem;border-radius:4px;border:none;background-color:#e6e6e6;}
+.alizi-params.active{background-color:#428bca;}
+.alizi-rows .alizi-params input{display:inline-block;}
+.alizi-payment label{background-image:none;padding-left:5px !important;}

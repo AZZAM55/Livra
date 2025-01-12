@@ -1,0 +1,179 @@
+{:W("Main",array('module'=>MODULE_NAME,'action'=>ACTION_NAME,'do'=>$_GET['do']))}
+
+<div class="layout-main">    
+    <div id="breadclumb" class="box">
+        <h3><strong>{:lang('breadclumb_colon')}</strong>{:lang(MODULE_NAME)}<span></span><empty name="_GET.id">{:lang('add')}<else />{:lang('view')}</empty></h3>
+    </div>
+    <div class="box clear-fix">
+        <div class="layout-block-header"><h2>{:lang('order_info')} <span class="order-no">（{:lang('order_number_colon')}{$info.order_no}）</span></h2></div>  
+        <div class="AccountInfo">
+            <div class="info-block">
+                <table class="info-table">
+                    <tbody>
+                    	<tr>
+							<th>{:lang('order_status_colon')}</th>
+                            <td width="200">{:status($info['status'],'',C('order_status'))}</td>
+                            <th>{:lang('item_name_colon')}</th>
+                            <td>{$info.item_name}<notempty name="info.item_params">（{$info.item_params}）</notempty></td>
+                        </tr>
+						<tr>
+                            <th>{:lang('extend_package_colon')}</th>
+                            <td class="extends">
+								<php>
+									$extends=json_decode($info['item_extends'],true);
+									foreach($extends as $name=>$value){
+										$value = is_array($value)?implode('，',$value):$value;
+										echo "<p><i>$name</i>：<span>$value</span></p>";
+									}
+								</php>
+							</td>
+                            <th>{:lang('amount_price_colon')}</th>
+                            <td>
+								{$info.quantity}/<b class="alert">{$info.order_price}</b>{:lang('yuan')} + {$info.shipping_price}{:lang('yuan')} = <b class="alert">{$info.total_price}</b>{:lang('yuan')}
+							</td>
+                        </tr>
+                        <tr>
+							<th>{:lang('date_colon')}</th>
+                            <td valign="top">{$info.datetime|substr=0,10}</td>
+							<th>{:lang('payment_colon')}</th>
+                            <td><php>$payment = C('PAYMENT');echo $payment[$info['payment']]['name'];</php></td>
+                        </tr>
+						<tr>
+                            <th>{:lang('channel_colon')}</th>
+                            <td>{$info.channel_id}</td>
+							<th>{:lang('设备_colon')}</th>
+                            <td><eq name="info.device" value="2">M<else />PC</eq></td>
+                        </tr>
+						<tr>
+                            <th>{:lang('下单地址_colon')}</th>
+                            <td valign="top"><a href="{$info.url}" target="_blank">{$info.url}</a></td>
+                            <th>{:lang('来路地址_colon')}</th>
+                            <td valign="top"><a href="{$info.referer}" target="_blank">{$info.referer}</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>  
+    </div><!--.box-->
+	
+	<if condition="$_SESSION['user']['role'] eq 'admin' || in_array('view',$_SESSION['user']['auth'])">
+	<div class="box clear-fix">
+        <div class="layout-block-header"><h2>{:lang('customer_info')}</h2></div>  
+        <div class="AccountInfo">
+            <div class="info-block">
+                <table class="info-table">
+                    <tbody>
+                    	<tr>
+                            <th>{:lang('realname_colon')}</th>
+                            <td width="100">{$info.name}</td>
+                            <th>{:lang('address_colon')}</th>
+                            <td>{$info.region} {$info.address}</td>
+                        </tr>
+						<tr>
+                            <th>{:lang('mobile_colon')}</th>
+                            <td>{$info.mobile}</td>
+							<th>{:lang('phone_colon')}</th>
+                            <td>{$info.phone}</td>
+                        </tr>
+						<tr>
+                            <th>{:lang('qq_colon')}</th>
+                            <td>{$info.qq}</td>
+                            <th>{:lang('zcode_colon')}</th>
+                            <td>{$info.zcode}</td>
+                        </tr>
+						<tr>
+                            <th>{:lang('email_colon')}</th>
+                            <td>{$info.mail}</td>
+							<th>{:lang('customer_ip_colon')}</th>
+                            <td><a href="http://www.ip.cn/index.php?ip={$info.add_ip}&from=http://{$_SERVER['HTTP_HOST']}{:C('ROOT_FILE')}" target="_blank">{$info.add_ip}</a></td>
+                        </tr>
+						<tr>
+                            <th>{:lang('remark_colon')}</th>
+                            <td colspan="3">{$info.remark}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>  
+    </div><!--.box-->
+	<else />
+	<div class="box clear-fix">
+        <div class="layout-block-header"><h2>{:lang('customer_info')}</h2></div>  
+        <div class="AccountInfo">
+            <div class="info-block">
+                <table class="info-table">
+                    <tbody>
+                    	<tr>
+                            <th>{:lang('realname_colon')}</th>
+                            <td width="100">{$info.name}</td>
+                            <th>{:lang('address_colon')}</th>
+                            <td>{$info.region}***</td>
+                        </tr>
+						<tr>
+                            <th>{:lang('mobile_colon')}</th>
+                            <td>{$info.mobile|substr=0,3}***{$info.mobile|substr="-4"}</td>
+							<th>{:lang('phone_colon')}</th>
+                            <td>{$info.phone|substr=0,4}***</td>
+                        </tr>
+						<tr>
+                            <th>{:lang('qq_colon')}</th>
+                            <td>{$info.qq|substr=0,4}***</td>
+                            <th>{:lang('zcode_colon')}</th>
+                            <td>{$info.zcode}</td>
+                        </tr>
+						<tr>
+                            <th>{:lang('email_colon')}</th>
+                            <td>
+								<php>
+									if($info['mail']){
+										$email=explode('@',$info['mail']);
+										echo substr($email[0],0,2).'***@'.$email[1];
+									}
+								</php>
+							</td>
+							<th>{:lang('customer_ip_colon')}</th>
+                            <td><a href="http://www.ip.cn/index.php?ip={$info.add_ip}&from=http://{$_SERVER['HTTP_HOST']}{:C('ROOT_FILE')}" target="_blank">{$info.add_ip}</a></td>
+                        </tr>
+						<tr>
+                            <th>{:lang('remark_colon')}</th>
+                            <td colspan="3">{$info.remark}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>  
+    </div><!--.box-->	
+	</if>
+	
+
+	<div class="box clear-fix">
+        <div class="layout-block-header"><h2>{:lang('action_record')}</h2></div>  
+        <div class="AccountInfo">
+            <div class="ui-table-body ui-table-body-hover">
+                <table cellpadding="0" cellspacing="0" width="100%">
+                    <thead>
+                        <tr class="ui-table-head">
+                            <th class="ui-table-hcell" width="150">操作时间</th>
+                            <th class="ui-table-hcell" width="80">操作类型</th>
+                            <th class="ui-table-hcell" width="80">操作用户</th>
+                            <th class="ui-table-hcell">操作备注</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+						<volist name="log" id="vo">
+                        <tr>
+                            <td>{$vo.add_time|date="Y-m-d H:i:s",###}</td>
+                            <td>{:status($vo['status'],'',C('order_status'))}</td>
+                            <td><empty name="vo.user_id">{:lang('customer')}<else />{$vo.user_id|getFields="User","username",###}</empty></td>
+                            <td class="action">{$vo.remark}</td>
+                        </tr>
+						</volist>
+					</tbody>
+                </table>
+            </div>
+        </div> 
+    </div><!--.box-->
+	
+
+       
+{:W("Foot")}   

@@ -1,0 +1,105 @@
+<include file="Item:header" />
+<notempty name="slider">
+<div class="newbanner">
+	<if condition="count($slider) gt 1">
+	  <div class="newflexslider">
+		<ul class="newslides">
+			<volist name="slider" id="vo">
+			<li><a href="{$vo.link}" target="{$vo.target}"><img src="{$vo.image|imageUrl}" /></a></li>
+			</volist>
+		</ul>
+	  </div>
+	<script type="text/javascript">
+	seajs.use(['jquery/newflexslider'], function(){ $('.newflexslider').newflexslider({ directionNav: true, pauseOnAction: false,newslideshowSpeed:3000 });});
+	</script>
+	<else />
+	<a href="{$slider[0]['link']}" target="{$slider[0]['target']}"><img src="{$slider[0]['image']|imageUrl}" /></a>
+	</if>
+</div>
+<script type="text/javascript">
+seajs.use(['jquery/newflexslider'], function(){ $('.newflexslider').newflexslider({ directionNav: true, pauseOnAction: false,newslideshowSpeed:3000 });});
+</script>
+</notempty>
+
+
+<include file="Item:brand" />
+
+<notempty name="hot.list">
+<div class="newmain list_title">
+	<img src="https://t13img.yangkeduo.com/cart/2018-11-05/48debbd65050df60e555556b261f0da2.png" class="img">
+	<span class="name">{:lang('hotItem')}</span><span class="desc"></span>
+</div>
+	
+<div class="newmain alizi-items">
+	<volist name="hot.list" id="vo">
+	<div class="common-double-goods-module">
+		<div class="common-double-goods-item">
+			<div class="goods-img-wrap">
+				<a href="{:U('Item/order',array('id'=>$vo['sn']))}" title="{$vo.name}"><img src="{$vo.image|imageUrl}"></a>
+			</div>
+			<div class="list_details">
+				<div class="desc"><a href="{:U('Item/order',array('id'=>$vo['sn']))}" title="{$vo.name}">{$vo.name}</a></div>
+				<div class="info">
+					<span class="special">&nbsp;</span>
+					<div class="price-wrapper">
+						<span class="price">{$vo.price|getPrice}</span>
+					</div>
+					<if condition="floatval($vo['original_price']) gt 0"><del class="original_price">{$vo.original_price|getPrice}</del></if>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	</volist>
+</div>
+</notempty>
+	
+{:W('Tabs',array('status'=>$aliziConfig['item_category_show'],'id'=>$aliziConfig['item_category_id'],'num'=>$aliziConfig['item_category_num']))}
+
+<notempty name="aliziConfig.weixin_status">
+<php>$slideshow = explode(',',$info['slideshow']);$imgUrl=$slideshow[0];</php>
+<script>
+define("wxShare",["jquery","https://res.wx.qq.com/open/js/jweixin-1.0.0.js"],function(a){
+	var $=a("jquery"),wx=a('https://res.wx.qq.com/open/js/jweixin-1.0.0.js');
+	var url = encodeURIComponent(location.href.split('#')[0]);
+    $.ajax({
+        type : "get",
+        url : "{:C('ALIZI_ROOT')}index.php?m=Order&a=wx&url="+url,
+        dataType : "json",
+        async : false,
+        success:function(share){
+            wx.config({
+                debug: false,
+                appId: share.appId,
+                timestamp: share.timestamp,
+                nonceStr: share.nonceStr,
+                url: share.url,
+                signature: share.signature,
+				//jsApiList:['onMenuShareAppMessage', 'onMenuShareTimeline', 'hideAllNonBaseMenuItem', 'showMenuItems','hideMenuItems']
+                jsApiList: [ 'onMenuShareTimeline', 'onMenuShareAppMessage']
+            });
+        },
+		complete: function(e){
+			console.log('complete');
+		},
+        error:function(data){  alert(data); }
+    });
+	wx.ready(function () {
+		var shareData = {
+			title: '{$info.name}',
+			desc: '{$info.brief}',
+			link: '{$thisUrl|urldecode}',
+			imgUrl: '{$imgUrl|imageUrl}',
+			success: function () {
+				alert('∑÷œÌ≥…π¶£°');
+			}
+		};
+		wx.hideAllNonBaseMenuItem();
+		wx.onMenuShareAppMessage(shareData);
+		wx.onMenuShareTimeline(shareData);
+	});
+});
+seajs.use("wxShare");
+</script>
+</notempty>
+<include file="Item:footer" />

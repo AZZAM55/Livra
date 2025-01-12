@@ -1,0 +1,54 @@
+/*
+ * 标题：时时订单系统
+ * 作者：47478439（QQ号）
+ * 官方网址：www.wxrob.com
+ * 官方店铺：https://www.wxrob.com/
+ * 警示信息：您可以复制使用本站静态文件（html/css/js/images），但请保留原创作者（47478439（QQ号））信息，谢谢。
+ */
+*{margin:0;padding:0;}
+html{height:100%;}
+body{margin:0;padding:0;font:14px/1.5 "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei", serif;}
+img{max-width:100%;}
+.alizi-order{border:4px solid #0C0;}
+.alizi-title{height:55px;background:url(title.gif) -10px 5px no-repeat;text-indent:-9999em;overflow:hidden;border-bottom:1px solid #0C0;background-color:transparent !important;}
+.alizi-side .alizi-title{background-position:-10px -55px;}
+.alizi-side{margin-left:-1px;border-left:1px solid #0C0;}
+.alizi-side.alizi-full-row{border-top:4px solid #0C0;}
+.rows-id-params input {display: inline-block;margin-right: 5px;}
+.alizi-rows{margin-top:5px !important;}
+.rows-id-params .rows-head{display:block;}
+rows-id-params .rows-params{margin-left:80px;}
+.rows-id-params .rows-params a{display:block;width:100%;color:#333 !important;background:none;border:none;line-height:22px;padding:0;}
+.rows-id-params .rows-params a img{display:none;}
+.rows-id-params .rows-params a:hover,.rows-id-params .rows-params a.active {color:#f60 !important;}
+
+.alizi-rows{position:relative;padding-top:.2rem;}
+.rows-head{position:absolute;left:0;width:5rem;font-weight:normal;border-bottom:none;padding:2px 0;text-align:right;}
+.rows-params{padding-left:5.5rem;line-height:2rem;}
+.alizi-params{border:1px solid #ccc;padding:0 .2rem;}
+.alizi-params.alizi-params-image{padding:.3rem;}
+select, .alizi-input-text{border-width:1px;padding:0;height:2rem;}
+textarea.alizi-input-text{height:auto !important;}
+.alizi-submit{width:100%;}
+.rows-id-params.rows-id-params-select .rows-head{display:block;}
+.rows-id-params.rows-id-params-select .rows-params{margin-left:5.5rem;}
+
+/*
+.alizi-payment .alizi-payment-2,.alizi-payment .alizi-payment-4{background-position:4px -48px;}
+.alizi-payment .alizi-payment-3{background-position:2px -97px;}
+.alizi-payment .alizi-payment-5{background-position:4px -147px;}
+.alizi-payment .alizi-payment-6{background-position:2px -195px;}
+.alizi-payment .alizi-payment-7{background-position:2px -247px;}
+.alizi-payment .alizi-payment-8{background-position:2px -298px;}
+.alizi-payment label.active,.alizi-payment label:hover{background-position:-200px -5px;}
+.alizi-payment .alizi-payment-2.active,.alizi-payment .alizi-payment-2:hover,.alizi-payment .alizi-payment-4.active,.alizi-payment .alizi-payment-4:hover{background-position:-198px -48px;;}
+.alizi-payment .alizi-payment-3.active,.alizi-payment .alizi-payment-3:hover{background-position:-200px -97px;}
+.alizi-payment .alizi-payment-5.active,.alizi-payment .alizi-payment-5:hover{background-position:-198px -147px;}
+.alizi-payment .alizi-payment-6.active,.alizi-payment .alizi-payment-6:hover{background-position:-198px -195px;}
+.alizi-payment .alizi-payment-7.active,.alizi-payment .alizi-payment-7:hover{background-position:-198px -247px;}
+.alizi-payment .alizi-payment-8.active,.alizi-payment .alizi-payment-8:hover{background-position:-198px -298px;}
+*/
+
+.alizi-radio .alizi-params,.alizi-radio .alizi-params.active{background:none;border:none;color:#f00 !important;display:block;float:none;margin:0;}
+.alizi-radio .alizi-params-image{float:left !important;}
+.alizi-radio .alizi-params input{display:inline-block;}

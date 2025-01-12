@@ -1,0 +1,30 @@
+<include file="Item:header" />
+<notempty name="slider">
+<div class="newbanner">
+	<if condition="count($slider) gt 1">
+	  <div class="newflexslider">
+		<ul class="newslides">
+			<volist name="slider" id="vo">
+			<li><a href="{$vo.link}" target="{$vo.target}"><img src="{$vo.image|imageUrl}" /></a></li>
+			</volist>
+		</ul>
+	  </div>
+	<script type="text/javascript">
+	seajs.use(['jquery/newflexslider'], function(){ $('.newflexslider').newflexslider({ directionNav: true, pauseOnAction: false,newslideshowSpeed:3000 });});
+	</script>
+	<else />
+	<a href="{$slider[0]['link']}" target="{$slider[0]['target']}"><img src="{$slider[0]['image']|imageUrl}" /></a>
+	</if>
+</div>
+<script type="text/javascript">
+seajs.use(['jquery/newflexslider'], function(){ $('.newflexslider').newflexslider({ directionNav: true, pauseOnAction: false,newslideshowSpeed:3000 });});
+</script>
+</notempty>
+
+<include file="Item:brand" />
+
+{:W('Item',$hot)}
+	
+{:W('Tabs',array('status'=>$aliziConfig['item_category_show'],'id'=>$aliziConfig['item_category_id'],'num'=>$aliziConfig['item_category_num']))}
+
+<include file="Item:footer" />

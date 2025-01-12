@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>{:lang('admin_panel')}</title>
+<link rel="dns-prefetch" href="http://{$_SERVER['SERVER_NAME']}">
+<link rel="shortcut icon" href="{:C('ALIZI_ROOT')}alizi.ico?v={$Think.const.ALIZI_VERSION}" />
+<link href="__PUBLIC__/Assets/css/esui.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Assets/css/union.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__PUBLIC__/Assets/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Assets/js/jquery.alizi.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Assets/js/jquery.scrollto.js"></script>
+<link href="__PUBLIC__/Assets/js/artDialog/skins/black.css" rel="stylesheet" type="text/css" />
+<script src="__PUBLIC__/Assets/js/artDialog/jquery.artDialog.min.js?v=2.8.4" type="text/javascript"></script>
+<script type="text/javascript">
+$(function(){
+	$('.ajax').click(function(e){
+		var url = $(this).attr('href');
+		e.preventDefault();
+		var dialog = $.dialog({lock: true,title:'操作进行中……',content: '<img src="__PUBLIC__/Assets/img/waiting.gif" />'});
+		$.ajax({
+			type:'get',
+			url:url,
+			dataType:'json',
+			success:function(data){
+				dialog.close();
+				$.dialog({content: data.info,time:5000,ok:true});
+				console.log(data);
+			}
+		})
+	})
+})
+</script>
+<style>#MainPage{min-width:1200px;}.layout-main{min-width:1000px;overflow:auto;}</style>
+</head>
+<body>
+	<div id="MainPage">
+		<div id="Header" class="layout-full-width">
+			<div id="Logo"><a href="{:U('Index/index')}" style="color:#fff;font-size:25px;"><img src="__PUBLIC__/Assets/img/Alizi-logo.png" height="35" /></a></div>
+			<ul id="Toolbar">.
+				<li><a href="http://{$_SERVER['HTTP_HOST']}{:C('ALIZI_ROOT')}<neq name='_SESSION.user.id' value='1'>?uid={$_SESSION['user']['id']}</neq>" class="toolbar_item" target="_blank">{:lang('website_index')}</a></li>
+				<li><a href="http://{$_SERVER['HTTP_HOST']}{:C('ALIZI_ROOT')}index.php?m=User" class="toolbar_item" target="_blank">会员后台</a></li>
+				<eq name="_SESSION['user']['role']" value="admin">
+				<li><a href="{:U('Public/clearCache')}" class="toolbar_item" >{:lang('delete_cache')}</a></li>
+				</eq>
+				<li class="last"><a href="{:U('Public/logout')}" class="toolbar_item" >{:lang('logout')}</a></li>
+			</ul>
+			<!-- 主菜单 -->
+            <ul id="Nav">
+			
+                <volist name="menu" id="vo">
+					<php>$index = array_keys($vo[0]['list']);</php>
+                    <li <eq name='module' value='$key'>class="active"</eq>><a href="{:U($key.'/'.$index[0])}">{$key|lang}</a></li>
+                </volist>
+            </ul>
+		</div>
+		
+		<div id="MainBody" class="layout-full-width">
+        	<div class="layout-sidebar">
+            	<div class="pinned-bak">
+                	<volist name="menu[$module]" id="vo">
+                        <div class="box sub-nav">
+                            <h3>{$vo.name|lang}</h3>
+                            <ul class="ui-list">
+                                <foreach name="vo.list" key="k" item="m">
+                                    <li <eq name='k' value='$action'>class="active"</eq>>
+                                    	<a href="{:U(MODULE_NAME.'/'.$k)}" title="{$m|lang}">{$m|lang}</a>
+                                    </li>
+                                </foreach>
+                            </ul>
+                        </div>
+                    </volist>
+                </div>
+            </div><!--.layout-sidebar-->

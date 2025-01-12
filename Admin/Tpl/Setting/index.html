@@ -1,0 +1,188 @@
+{:W("Main",array('module'=>MODULE_NAME,'action'=>ACTION_NAME,'do'=>$_GET['do']))}
+<script type="text/javascript">
+isupload = false;
+function aliziUpload(fileInput){
+	if(isupload != false){
+		$.alert("其他文件正在上传...请稍后");
+	}else{
+		$(fileInput).click();
+	}
+}
+function uploadImg(fileInput,target){
+	var filename = $(fileInput).val();
+    if(filename != '' && filename != null){
+    	isupload = true;
+        var pic = $(fileInput)[0].files[0];
+		console.log(pic);
+        var fd = new FormData();
+        fd.append('imgFile', pic);
+        $.ajax({
+            url:'{:U("Public/upload")}',
+            type:"post",
+            dataType:'json',
+            data: fd,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success:function(data){
+                if(data.status=='1'){
+                    $(target).val(data.data);
+					$.alert('上传成功',1);
+                }else{
+					$.alert(data.data,0);
+				}
+            },
+            error:function (){
+				$.alert("上传出错了",0);
+            }
+        });
+        isupload = false;
+    }
+    isupload = false;
+}
+</script>
+<if condition="C('CURRENT_LANG') eq 'zh-cn'">
+<style>.facebook_pixel_id,#ipcloak{display:none;}</style>
+</if>
+
+<div class="layout-main">    
+    <div id="breadclumb" class="box">
+        <h3>
+            <strong>{:lang('breadclumb_colon')}</strong>
+            {:lang(MODULE_NAME)}<span></span>
+        </h3>
+    </div>
+    <div id="CooperationMain" class="box clear-fix">
+        <div class="layout-block-header"><h2>{:lang('system_setting')}</h2></div>
+        <ul class="ui-tab-group">
+            <volist name="setting" id="list">
+                <li id="{$key}" <eq name="i" value="1"> class="active"</eq>><a href="#{$key}">{$key|lang}</a></li>
+            </volist>
+        </ul>
+  
+        <volist name="setting" id="vo">
+			<php>$title = $key;</php>
+            <div class="info-block">
+                <form method="post" action="__SELF__" enctype="multipart/form-data" class="form-horizontal" id="ajaxform-{$key}" autocomplete="off">
+                <table class="info-table">
+                    <tbody>
+                        <volist name="vo" id="k">
+							<notempty name="k.name">
+								</td>
+							</tr>
+							<tr class="{$key}">
+								<th>{$k.name}</th>
+								<td>
+							<else />						
+							</notempty>	
+                                {$k|setting=$key,$value[$key]}
+                                <notempty name="k.decription"><span class="ui-validityshower-info">{$k.decription}</span></notempty>
+                            <empty name="k.name">
+							<empty name="k.name">
+								</td>
+							</tr>
+							</empty>
+						
+						<eq name="k.separator" value="1"><tr><th colspan=2>&nbsp;</th></tr></eq>
+                        </volist>
+                        <tr>
+							<th>&nbsp;</th>
+							<td>
+								<if condition="C('CURRENT_LANG') eq 'zh-cn'">
+								<input type="hidden" name="ipcloak_status" value="0" />
+								</if>
+								<input type="submit" class="btn btn-ok" value="{:lang('save')}" />
+								<input type="reset" class="btn" value="{:lang('reset')}" />
+								<eq name="title" value="mail_setting"><input type="button" class="btn" onclick="sendMailTest()" value="邮件测试"></eq>
+							</td>
+						</tr>
+                    </tbody>
+                </table>
+                </form>
+            </div>
+        </volist>
+          
+    </div><!--.box-->
+<script type="text/javascript" src="__PUBLIC__/Assets/js/jscolor.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	var index = $(window.location.hash).index();
+	$('#CooperationMain').aliziTabs({selected: index>0?index:0});	
+	
+	$.ajax({
+		type:'get',
+		url:"{:U('Setting/getUserGroup')}",
+		success:function(data){ 
+			var group = '',list = data.list;
+			for(var i=0;i<list.length;i++){
+				var selected = list[i]['id']==data.default?'selected':'';
+				group += "<option value='"+list[i]['id']+"' "+selected+">"+list[i]['name']+"</option>";
+			}
+			console.log(group);
+			$('#agent_group').html(group);
+		},
+		dataType: 'json'
+	})
+})
+
+$('form').ajaxForm({
+	timeout: 5000,
+	error:function(){ alert("{:lang('ajaxError')}");},
+	beforeSubmit:function(){ $('#ajaxLoading').show();},
+	success:function(data){ 
+		$('#ajaxLoading').hide();
+		if(data.status==1){
+			$.alert(data.info,data.status,function(){window.location.reload();});
+		}else{
+			$.alert(data.info,data.status);
+		}
+	},
+	dataType: 'json'
+});
+function sendMailTest(){
+	$.ajax({
+		type:'get',
+		url:"{:U('Setting/sendMailTest')}",
+		beforeSend:function(){ $('#ajaxLoading').show();},
+		success:function(data){ 
+			$('#ajaxLoading').hide();
+			if(data.status==1){
+				$.alert(data.info+'发送成功！',data.status);
+			}else{
+				$.alert('发送失败！错误代码：<br>'+data.info,data.status);
+			}
+		},
+		dataType: 'json'
+	})
+}
+</script>
+<div id="ajaxLoading" style="display:none;"><div class="loading-bar"><img src="__PUBLIC__/Assets/img/waiting.gif">加载中，请稍候...</div></div>
+
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/Assets/js/ueditor-1.4.3/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/Assets/js/ueditor-1.4.3/ueditor.all.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/Assets/js/ueditor-1.4.3/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+ var ue = UE.getEditor('result_info',{
+	toolbars:[['fullscreen', 'source', '|', 'template', 'cleardoc',  '|',
+	'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'removeformat', 'formatmatch',  'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall',  'fontfamily', 'fontsize', 
+	'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+	'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+	'simpleupload', 'insertimage']]
+});
+
+ipcloakDebug("{$value.ipcloak_debug}");
+$('#ipcloak_debug').change(function(i){
+	var val = $(this).val();
+	ipcloakDebug(val);
+})
+function ipcloakDebug(val){
+	val = parseInt(val);
+	if(val==1){
+		$('.ipcloak_test_ip').show();
+	}else{
+		$('.ipcloak_test_ip').hide();
+	}
+}
+</script>
+
+{:W("Foot")}   

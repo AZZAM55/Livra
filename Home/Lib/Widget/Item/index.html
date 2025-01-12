@@ -1,0 +1,23 @@
+
+<notempty name="data.list">
+	<div class="newmain background">
+	  <h4 class="newtitle"><span>{$data.title}</span></h4>
+	  <dl>
+		<volist name="data.list" id="vo">
+		<php>$type = $vo['is_hot']==1?'dt':'dd';</php>
+		<{$type} class="alizi-item-list"> 
+			<a href="{:U('Item/order',array('id'=>$vo['sn']))}" title="{$vo.name}" class="info">
+				<div class="img"><img src="<empty name="vo.thumb">{$vo.image|imageUrl}<else />{$vo.thumb|imageUrl}</empty>" class="lazy" /></div>
+			</a>
+			<div class="clear"></div>
+			<div class="newmain_text">
+				<h4>{$vo.name}</h4>
+				<em>{$aliziConfig['symbol']?$aliziConfig['symbol']:lang('symbol')}<strong>{$vo.price}</strong></em>
+				<if condition="floatval($vo['original_price']) gt 0"><del>{$aliziConfig['symbol']?$aliziConfig['symbol']:lang('symbol')}{$vo.original_price}</del></if>
+			</div>
+		</{$type}>
+		</volist>
+	  </dl>
+	  <div class="clear"></div>
+	</div>
+</notempty>
